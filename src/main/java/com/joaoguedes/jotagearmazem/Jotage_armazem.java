@@ -2,16 +2,18 @@ package com.joaoguedes.jotagearmazem;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Objects;
+
 public final class Jotage_armazem extends JavaPlugin {
+    private CactusStorageManager cactusStorageManager;
 
     @Override
     public void onEnable() {
-        // Plugin startup logic
+        cactusStorageManager = new CactusStorageManager();
 
-    }
+        getServer().getConsoleSender().sendMessage("§aJotaGe-Armazem enabled!");
 
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
+        getServer().getPluginManager().registerEvents(new CactusBreakListener(cactusStorageManager), this);
+        Objects.requireNonNull(getCommand("armazem")).setExecutor(new CactusCommand(cactusStorageManager));
     }
 }
