@@ -1,0 +1,4 @@
+name: jotage-armazem
+version: '${project.version}'
+main: com.joaoguedes.jotagearmazem.Jotage_armazem
+api-version: '1.17'
