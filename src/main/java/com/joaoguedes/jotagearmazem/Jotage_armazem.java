@@ -6,11 +6,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.Objects;
 
 public final class Jotage_armazem extends JavaPlugin {
-    private CactusStorageManager cactusStorageManager;
 
     @Override
     public void onEnable() {
-        cactusStorageManager = new CactusStorageManager();
+        CactusStorageManager cactusStorageManager = new CactusStorageManager();
 
         if (getServer().getPluginManager().getPlugin("PlotSquared") == null) {
             getLogger().severe("PlotSquared não encontrado! O plugin será desativado.");
@@ -18,6 +17,7 @@ public final class Jotage_armazem extends JavaPlugin {
             return;
         }
 
+        getServer().getConsoleSender().sendMessage("§3[JotaGe-Armazem] Enabled!");
         getServer().getConsoleSender().sendMessage("§3[JotaGe-Armazem] Enabled!");
 
         getServer().getPluginManager().registerEvents(new CactusDropListener(cactusStorageManager), this);
