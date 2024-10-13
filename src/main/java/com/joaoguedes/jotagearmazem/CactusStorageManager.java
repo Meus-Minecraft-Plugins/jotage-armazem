@@ -4,20 +4,21 @@ import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class CactusStorageManager {
-    private Map<Player, Integer> cactusArmazem = new HashMap<>();
+    private Map<UUID, Integer> cactusArmazem = new HashMap<>();
 
-    public void addCactus(Player player, int amount) {
-        int currentAmount = cactusArmazem.getOrDefault(player, 0);
-        cactusArmazem.put(player, currentAmount + amount);
+    public void addCactus(UUID playerUUID, int amount) {
+        int currentAmount = cactusArmazem.getOrDefault(playerUUID, 0);
+        cactusArmazem.put(playerUUID, currentAmount + amount);
     }
 
-    public int getCactusCount(Player player) {
-        return cactusArmazem.getOrDefault(player, 0);
+    public int getCactusCount(UUID playerUUID) {
+        return cactusArmazem.getOrDefault(playerUUID, 0);
     }
 
-    public void clearCactus(Player player) {
+    public void clearCactus(UUID player) {
         cactusArmazem.put(player, 0);
     }
 }

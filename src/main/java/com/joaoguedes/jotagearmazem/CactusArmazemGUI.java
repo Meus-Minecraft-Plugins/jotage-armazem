@@ -12,7 +12,7 @@ import java.util.List;
 
 public class CactusArmazemGUI {
     public void openArmazem(Player player, int storedCactus) {
-        Inventory armazem = Bukkit.createInventory(null, 9, "Armazém de Cactos");
+        Inventory armazem = Bukkit.createInventory(null, 27, "Armazem");
 
         ItemStack cactusItem = new ItemStack(Material.CACTUS, 1);
         ItemMeta meta = cactusItem.getItemMeta();
@@ -20,10 +20,12 @@ public class CactusArmazemGUI {
 
         List<String> lore = new ArrayList<>();
         lore.add("§7Quantidade: §e" + storedCactus);
+        double totalValue = storedCactus * 50;
+        lore.add("§7Valor: §e" + totalValue);
         meta.setLore(lore);
         cactusItem.setItemMeta(meta);
 
-        armazem.setItem(4, cactusItem);
+        armazem.setItem(13, cactusItem);
 
         player.openInventory(armazem);
     }

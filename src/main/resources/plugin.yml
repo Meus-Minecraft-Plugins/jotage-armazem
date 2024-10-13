@@ -2,6 +2,7 @@ name: jotage-armazem
 version: '${project.version}'
 main: com.joaoguedes.jotagearmazem.Jotage_armazem
 api-version: '1.17'
+depend: [PlotSquared]
 commands:
   armazem:
     description: "Abre o armazém de cactos do jogador"

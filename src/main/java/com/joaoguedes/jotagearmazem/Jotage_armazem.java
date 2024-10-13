@@ -1,5 +1,6 @@
 package com.joaoguedes.jotagearmazem;
 
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
@@ -11,9 +12,16 @@ public final class Jotage_armazem extends JavaPlugin {
     public void onEnable() {
         cactusStorageManager = new CactusStorageManager();
 
-        getServer().getConsoleSender().sendMessage("§aJotaGe-Armazem enabled!");
+        if (getServer().getPluginManager().getPlugin("PlotSquared") == null) {
+            getLogger().severe("PlotSquared não encontrado! O plugin será desativado.");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
 
-        getServer().getPluginManager().registerEvents(new CactusBreakListener(cactusStorageManager), this);
+        getServer().getConsoleSender().sendMessage("§3[JotaGe-Armazem] Enabled!");
+
+        getServer().getPluginManager().registerEvents(new CactusDropListener(cactusStorageManager), this);
+        getServer().getPluginManager().registerEvents(new CactusArmazemListener(), this);
         Objects.requireNonNull(getCommand("armazem")).setExecutor(new CactusCommand(cactusStorageManager));
     }
 }
