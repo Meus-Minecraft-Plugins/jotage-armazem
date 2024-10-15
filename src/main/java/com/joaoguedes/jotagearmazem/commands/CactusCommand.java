@@ -1,5 +1,7 @@
-package com.joaoguedes.jotagearmazem;
+package com.joaoguedes.jotagearmazem.commands;
 
+import com.joaoguedes.jotagearmazem.CactusStorageManager;
+import com.joaoguedes.jotagearmazem.menus.ArmazemGUI;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -21,7 +23,7 @@ public class CactusCommand implements CommandExecutor {
             UUID ownerUUID = player.getUniqueId();
 
             int storedCactus = cactusStorageManager.getCactusCount(ownerUUID);
-            new CactusArmazemGUI().openArmazem(player, storedCactus);
+            new ArmazemGUI().openArmazem(player);
         } else {
             commandSender.sendMessage("§cApenas jogadores podem usar este comando.");
         }
