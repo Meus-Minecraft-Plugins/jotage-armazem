@@ -2,26 +2,18 @@ package com.joaoguedes.jotagearmazem.listeners;
 
 import com.joaoguedes.jotagearmazem.CactusStorageManager;
 import com.joaoguedes.jotagearmazem.Jotage_armazem;
-import com.joaoguedes.jotagearmazem.menus.CactusArmazemGUI;
-import org.bukkit.Bukkit;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.UUID;
 
 public class CactusArmazemGuiListener implements Listener {
-    private final CactusArmazemGUI cactusArmazemGUI;
-    private final JavaPlugin plugin;
     private final CactusStorageManager cactusStorageManager;
 
-    public CactusArmazemGuiListener(CactusArmazemGUI cactusArmazemGUI, JavaPlugin plugin, CactusStorageManager cactusStorageManager) {
-        this.cactusArmazemGUI = cactusArmazemGUI;
-        this.plugin = plugin;
+    public CactusArmazemGuiListener(CactusStorageManager cactusStorageManager) {
         this.cactusStorageManager = cactusStorageManager;
     }
 
@@ -38,8 +30,11 @@ public class CactusArmazemGuiListener implements Listener {
         }
 
         if (e.getSlot() == 11 && e.getCurrentItem() != null) {
-            player.sendMessage("§aVocê vendeu §6§l" + cactusStorageManager.getCactusCount(playerUUID) + "§a cactos!");
-            player.sendMessage("§aE recebeu §6§l" + cactusStorageManager.getCactusCount(playerUUID) * 50 + "§a coins!");
+            Economy economy = Jotage_armazem.getEconomy();
+            long invidualCactusValue = Jotage_armazem.getPluginConfig().getLong("cactus.individualValue");
+            int cactusCount = cactusStorageManager.getCactusCount(playerUUID);
+            player.sendMessage(String.format("§aVocê vendeu §6" + cactusCount + "§a cactos por §6§l" + economy.format(cactusCount * invidualCactusValue)));
+            economy.depositPlayer(player, cactusCount * invidualCactusValue);
             cactusStorageManager.clearCactus(playerUUID);
             player.closeInventory();
         }

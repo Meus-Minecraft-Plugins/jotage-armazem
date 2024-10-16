@@ -14,6 +14,6 @@ public class EventManager {
 
         pm.registerEvents(new ArmazemGuiListener(cactusStorageManager), plugin);
 
-        pm.registerEvents(new CactusArmazemGuiListener(cactusArmazemGUI, plugin, cactusStorageManager), plugin);
+        pm.registerEvents(new CactusArmazemGuiListener(cactusStorageManager), plugin);
     }
 }

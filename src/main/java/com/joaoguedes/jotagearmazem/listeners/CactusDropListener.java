@@ -3,7 +3,6 @@ package com.joaoguedes.jotagearmazem.listeners;
 import com.intellectualcrafters.plot.api.PlotAPI;
 import com.intellectualcrafters.plot.object.Plot;
 import com.joaoguedes.jotagearmazem.CactusStorageManager;
-import com.joaoguedes.jotagearmazem.menus.CactusArmazemGUI;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;

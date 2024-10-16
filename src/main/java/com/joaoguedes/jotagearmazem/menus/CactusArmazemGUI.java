@@ -1,14 +1,14 @@
 package com.joaoguedes.jotagearmazem.menus;
 
 import com.joaoguedes.jotagearmazem.CactusStorageManager;
-import com.joaoguedes.jotagearmazem.listeners.CactusArmazemGuiListener;
+import com.joaoguedes.jotagearmazem.Jotage_armazem;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,10 +40,14 @@ public class CactusArmazemGUI {
         venderMeta.setDisplayName("§aVender");
 
         List<String> venderLore = new ArrayList<>();
+
         venderLore.add("");
         venderLore.add("§7Quantidade: §a" + cactusCount);
-        int totalValue = cactusCount * 50;
-        venderLore.add("§7Valor: §a" + totalValue);
+        long individualValue = Jotage_armazem.getPluginConfig().getLong("cactus.individualValue");
+        long totalValue = cactusCount * individualValue;
+        Economy economy = Jotage_armazem.getEconomy();
+        venderLore.add("§7Valor individual: §a" + economy.format(individualValue));
+        venderLore.add("§7Valor total: §a" + economy.format(totalValue));
         venderLore.add("");
         venderLore.add("§aClique para vender!");
         venderLore.add("");
