@@ -4,24 +4,28 @@ import com.joaoguedes.jotagearmazem.commands.CactusCommand;
 import com.joaoguedes.jotagearmazem.listeners.EventManager;
 import com.joaoguedes.jotagearmazem.menus.CactusArmazemGUI;
 import com.joaoguedes.jotagearmazem.utils.CactusStorageManager;
-import com.joaoguedes.jotagearmazem.utils.upgrade.ValorUpgrade;
+import com.joaoguedes.jotagearmazem.utils.upgrade.UpgradeData;
+import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.FortuneUpgrade;
+import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.ValorUpgrade;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
 import java.util.Objects;
 
-public final class Jotage_armazem extends JavaPlugin {
+public final class JotageArmazem extends JavaPlugin {
     private static Economy economy = null;
     private static FileConfiguration config;
 
     @Override
     public void onEnable() {
+        config = this.getConfig();
+
         CactusStorageManager cactusStorageManager = new CactusStorageManager();
-        ValorUpgrade valorUpgrade = new ValorUpgrade(10, new HashMap<>(), new HashMap<>(), new HashMap<>());
-        CactusArmazemGUI cactusArmazemGUI = new CactusArmazemGUI(cactusStorageManager, valorUpgrade);
+        ValorUpgrade valorUpgrade = new ValorUpgrade(new UpgradeData(), config.getInt("upgrades.valor.maxlevel"));
+        FortuneUpgrade fortuneUpgrade = new FortuneUpgrade(new UpgradeData(), config.getInt("upgrades.fortune.maxlevel"));
+        CactusArmazemGUI cactusArmazemGUI = new CactusArmazemGUI(cactusStorageManager, valorUpgrade, fortuneUpgrade);
 
         if (!setupEconomy()) {
             getLogger().severe("Dependência do Vault não encontrada! O plugin será desativado.");
@@ -37,12 +41,13 @@ public final class Jotage_armazem extends JavaPlugin {
 
         getServer().getConsoleSender().sendMessage("§d[JotaGe-Armazem] iniciado com sucesso!");
 
-        EventManager.registerEvents(this, cactusStorageManager, cactusArmazemGUI, valorUpgrade);
+        EventManager.registerEvents(this, cactusStorageManager, cactusArmazemGUI, valorUpgrade, fortuneUpgrade);
 
         Objects.requireNonNull(getCommand("armazem")).setExecutor(new CactusCommand());
 
+        saveDefaultConfig();
+        config.options().copyDefaults(true);
         saveConfig();
-        config = getConfig();
     }
 
     private boolean setupEconomy() {

@@ -1,6 +1,6 @@
 name: jotage-armazem
 version: '${project.version}'
-main: com.joaoguedes.jotagearmazem.Jotage_armazem
+main: com.joaoguedes.jotagearmazem.JotageArmazem
 api-version: '1.8.8'
 depend: [PlotSquared, Vault]
 commands:

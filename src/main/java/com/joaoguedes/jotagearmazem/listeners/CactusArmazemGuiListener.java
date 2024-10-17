@@ -1,9 +1,11 @@
 package com.joaoguedes.jotagearmazem.listeners;
 
+import com.joaoguedes.jotagearmazem.menus.ArmazemGUI;
 import com.joaoguedes.jotagearmazem.menus.UpgradeArmazemGUI;
 import com.joaoguedes.jotagearmazem.utils.CactusStorageManager;
-import com.joaoguedes.jotagearmazem.Jotage_armazem;
-import com.joaoguedes.jotagearmazem.utils.upgrade.ValorUpgrade;
+import com.joaoguedes.jotagearmazem.JotageArmazem;
+import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.FortuneUpgrade;
+import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.ValorUpgrade;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,10 +17,12 @@ import java.util.UUID;
 public class CactusArmazemGuiListener implements Listener {
     private final CactusStorageManager cactusStorageManager;
     private final ValorUpgrade valorUpgrade;
+    private final FortuneUpgrade fortuneUpgrade;
 
-    public CactusArmazemGuiListener(CactusStorageManager cactusStorageManager, ValorUpgrade valorUpgrade) {
+    public CactusArmazemGuiListener(CactusStorageManager cactusStorageManager, ValorUpgrade valorUpgrade, FortuneUpgrade fortuneUpgrade) {
         this.cactusStorageManager = cactusStorageManager;
         this.valorUpgrade = valorUpgrade;
+        this.fortuneUpgrade = fortuneUpgrade;
     }
 
     @EventHandler
@@ -33,16 +37,25 @@ public class CactusArmazemGuiListener implements Listener {
             e.setCancelled(true);
 
             if (e.getSlot() == 11 && e.getCurrentItem() != null) {
-                Economy economy = Jotage_armazem.getEconomy();
+                Economy economy = JotageArmazem.getEconomy();
                 int cactusCount = cactusStorageManager.getCactusCount(playerUUID);
-                player.sendMessage(String.format("§aVocê vendeu §6" + cactusCount + "§a cactos por §6§l" + economy.format(cactusCount * valorUpgrade.getCactusValue(playerUUID))));
-                economy.depositPlayer(player, cactusCount * valorUpgrade.getCactusValue(playerUUID));
+                player.sendMessage(String.format("§aVocê vendeu §6" + cactusCount + "§a cactos por §6§l" + economy.format(cactusCount * valorUpgrade.getCactusValue(playerUUID) * fortuneUpgrade.getFortuneValue(playerUUID))));
+                economy.depositPlayer(player, cactusCount * valorUpgrade.getCactusValue(playerUUID) * fortuneUpgrade.getFortuneValue(playerUUID));
                 cactusStorageManager.clearCactus(playerUUID);
                 player.closeInventory();
             }
 
             if (e.getSlot() == 13 && e.getCurrentItem() != null) {
-                new UpgradeArmazemGUI(valorUpgrade).openUpgradeArmazemGUI(playerUUID);
+                new UpgradeArmazemGUI(valorUpgrade, fortuneUpgrade).openUpgradeArmazemGUI(playerUUID);
+            }
+
+            if (e.getSlot() == 15 && e.getCurrentItem() != null) {
+                // toggleAutoSell(player, playerUUID);
+            }
+
+            if (e.getSlot() == 26 && e.getCurrentItem() != null) {
+                ArmazemGUI armazemGUI = new ArmazemGUI();
+                armazemGUI.openArmazem(player);
             }
         }
     }

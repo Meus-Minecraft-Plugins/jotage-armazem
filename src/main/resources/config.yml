@@ -1,2 +1,11 @@
-cactus:
-  individualValue: 50000000
+upgrades:
+  valor:
+    maxlevel: 12  # Defina aqui o nível máximo do Upgrade de VALOR.
+    inicialprice: 1000000000 # Defina aqui o custo de upgrade inicial do Upgrade de VALOR.
+    iniciallevel: 1 # Defina aqui o nível que o player deve iniciar do Upgrade de VALOR
+    inicialcactusvalue: 5000 # Defina aqui o valor unitário inicial do cacto no Upgrade de VALOR.
+  fortune:
+    maxlevel: 8  # Defina aqui o nível máximo do Upgrade de FORTUNA.
+    inicialprice: 100000000 # Defina aqui o custo de upgrade inicial do Upgrade de VALOR.
+    iniciallevel: 1 # Defina aqui o nível que o player deve iniciar do Upgrade de VALOR
+    inicialfortunevalue: 1 # Defina aqui o valor unitário inicial do cacto no Upgrade de VALOR.

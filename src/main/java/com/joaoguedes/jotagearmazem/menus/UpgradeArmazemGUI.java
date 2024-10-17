@@ -1,7 +1,8 @@
 package com.joaoguedes.jotagearmazem.menus;
 
-import com.joaoguedes.jotagearmazem.Jotage_armazem;
-import com.joaoguedes.jotagearmazem.utils.upgrade.ValorUpgrade;
+import com.joaoguedes.jotagearmazem.JotageArmazem;
+import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.FortuneUpgrade;
+import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.ValorUpgrade;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -17,9 +18,11 @@ import java.util.UUID;
 public class UpgradeArmazemGUI {
 
     private final ValorUpgrade valorUpgrade;
+    private final FortuneUpgrade fortuneUpgrade;
 
-    public UpgradeArmazemGUI(ValorUpgrade valorUpgrade) {
+    public UpgradeArmazemGUI(ValorUpgrade valorUpgrade, FortuneUpgrade fortuneUpgrade) {
         this.valorUpgrade = valorUpgrade;
+        this.fortuneUpgrade = fortuneUpgrade;
     }
 
     public void openUpgradeArmazemGUI(UUID playerUUID) {
@@ -29,6 +32,7 @@ public class UpgradeArmazemGUI {
         upgradeArmazem.setItem(11, createValorItem(playerUUID));
         upgradeArmazem.setItem(13, createFortunaItem(playerUUID));
         upgradeArmazem.setItem(15, createLimiteItem(playerUUID));
+        upgradeArmazem.setItem(26, createBackItem());
 
         player.openInventory(upgradeArmazem);
     }
@@ -41,12 +45,12 @@ public class UpgradeArmazemGUI {
 
         List<String> valorLore = new ArrayList<>();
 
-        Economy economy = Jotage_armazem.getEconomy();
+        Economy economy = JotageArmazem.getEconomy();
 
         valorLore.add("§7Aumenta o valor unitário");
         valorLore.add("§7de cada cacto.");
         valorLore.add("");
-        valorLore.add("§fNível ≻ §7" + valorUpgrade.getCurrentLevel(playerUUID) + "/" + economy.format(valorUpgrade.getMaxLevel(playerUUID)));
+        valorLore.add("§fNível ≻ §7" + valorUpgrade.getCurrentLevel(playerUUID) + "/" + economy.format(valorUpgrade.getMaxLevel()));
         valorLore.add("§fValor ≻ §7" + economy.format(valorUpgrade.getCactusValue(playerUUID)));
         valorLore.add("");
         valorLore.add("§a➜ §fPreço ≻ §e" + economy.format(valorUpgrade.getCurrentPrice(playerUUID)));
@@ -67,13 +71,15 @@ public class UpgradeArmazemGUI {
 
         List<String> fortunaLore = new ArrayList<>();
 
+        Economy economy = JotageArmazem.getEconomy();
+
         fortunaLore.add("§7Multiplica o drop dos");
         fortunaLore.add("§7cactos.");
         fortunaLore.add("");
-        fortunaLore.add("§fNível ≻ §71/100");
-        fortunaLore.add("§fFortuna ≻ §71x");
+        fortunaLore.add("§fNível ≻ §7" + fortuneUpgrade.getCurrentLevel(playerUUID) + "/" + fortuneUpgrade.getMaxLevel());
+        fortunaLore.add("§fFortuna ≻ §7" + fortuneUpgrade.getFortuneValue(playerUUID));
         fortunaLore.add("");
-        fortunaLore.add("§a➜ §fPreço ≻ §e10M");
+        fortunaLore.add("§a➜ §fPreço ≻ §e" + economy.format(fortuneUpgrade.getCurrentPrice(playerUUID)));
         fortunaLore.add("");
         fortunaLore.add("§a▎ Clique para evoluir!");
 
@@ -105,5 +111,23 @@ public class UpgradeArmazemGUI {
         limiteItem.setItemMeta(limiteMeta);
 
         return limiteItem;
+    }
+
+    public ItemStack createBackItem() {
+        // Valor Upgrade Slot
+        ItemStack backItem = new ItemStack(Material.ARROW, 1);
+        ItemMeta backMeta = backItem.getItemMeta();
+        backMeta.setDisplayName("§cVoltar");
+
+        List<String> backLore = new ArrayList<>();
+
+        backLore.add("");
+        backLore.add("§f▎ Clique para voltar a página!");
+        backLore.add("");
+
+        backMeta.setLore(backLore);
+        backItem.setItemMeta(backMeta);
+
+        return backItem;
     }
 }
