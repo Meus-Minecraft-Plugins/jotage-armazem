@@ -1,7 +1,8 @@
 package com.joaoguedes.jotagearmazem.menus;
 
-import com.joaoguedes.jotagearmazem.CactusStorageManager;
+import com.joaoguedes.jotagearmazem.utils.CactusStorageManager;
 import com.joaoguedes.jotagearmazem.Jotage_armazem;
+import com.joaoguedes.jotagearmazem.utils.upgrade.ValorUpgrade;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -16,9 +17,11 @@ import java.util.UUID;
 
 public class CactusArmazemGUI {
     private final CactusStorageManager cactusStorageManager;
+    private final ValorUpgrade valorUpgrade;
 
-    public CactusArmazemGUI(CactusStorageManager cactusStorageManager) {
+    public CactusArmazemGUI(CactusStorageManager cactusStorageManager, ValorUpgrade valorUpgrade) {
         this.cactusStorageManager = cactusStorageManager;
+        this.valorUpgrade = valorUpgrade;
     }
 
     public void openCactoArmazem(UUID playerUUID) {
@@ -26,7 +29,7 @@ public class CactusArmazemGUI {
 
         Inventory cactoArmazem = Bukkit.createInventory(null, 27, "Armazem de Cactos");
         cactoArmazem.setItem(11, createVenderItem(playerUUID));
-        cactoArmazem.setItem(13, createUpgradeItem());
+        cactoArmazem.setItem(13, createUpgradeItem(playerUUID));
         cactoArmazem.setItem(15, createAutoSellItem());
 
         player.openInventory(cactoArmazem);
@@ -43,10 +46,9 @@ public class CactusArmazemGUI {
 
         venderLore.add("");
         venderLore.add("§7Quantidade: §a" + cactusCount);
-        long individualValue = Jotage_armazem.getPluginConfig().getLong("cactus.individualValue");
-        long totalValue = cactusCount * individualValue;
+        long totalValue = cactusCount * valorUpgrade.getCactusValue(playerUUID);
         Economy economy = Jotage_armazem.getEconomy();
-        venderLore.add("§7Valor individual: §a" + economy.format(individualValue));
+        venderLore.add("§7Valor individual: §a" + economy.format(valorUpgrade.getCactusValue(playerUUID)));
         venderLore.add("§7Valor total: §a" + economy.format(totalValue));
         venderLore.add("");
         venderLore.add("§aClique para vender!");
@@ -58,7 +60,7 @@ public class CactusArmazemGUI {
         return venderItem;
     }
 
-    public ItemStack createUpgradeItem() {
+    public ItemStack createUpgradeItem(UUID playerUUID) {
         // Cactus Venda Slot
         ItemStack upgradeItem = new ItemStack(Material.REDSTONE, 1);
         ItemMeta upgradeMeta = upgradeItem.getItemMeta();
@@ -66,7 +68,7 @@ public class CactusArmazemGUI {
 
         List<String> upgradeLore = new ArrayList<>();
         upgradeLore.add("");
-        upgradeLore.add("§7Valor: §aX");
+        upgradeLore.add("§7Valor: §a" + valorUpgrade.getCurrentLevel(playerUUID));
         upgradeLore.add("§7Fortuna: §aX");
         upgradeLore.add("§7Limite: §aX");
         upgradeLore.add("");

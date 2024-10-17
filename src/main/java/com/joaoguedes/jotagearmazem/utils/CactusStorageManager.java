@@ -1,4 +1,4 @@
-package com.joaoguedes.jotagearmazem;
+package com.joaoguedes.jotagearmazem.utils;
 
 import java.util.HashMap;
 import java.util.Map;

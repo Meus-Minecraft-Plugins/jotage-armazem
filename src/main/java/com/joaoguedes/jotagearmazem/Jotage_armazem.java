@@ -3,11 +3,14 @@ package com.joaoguedes.jotagearmazem;
 import com.joaoguedes.jotagearmazem.commands.CactusCommand;
 import com.joaoguedes.jotagearmazem.listeners.EventManager;
 import com.joaoguedes.jotagearmazem.menus.CactusArmazemGUI;
+import com.joaoguedes.jotagearmazem.utils.CactusStorageManager;
+import com.joaoguedes.jotagearmazem.utils.upgrade.ValorUpgrade;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 public final class Jotage_armazem extends JavaPlugin {
@@ -17,7 +20,8 @@ public final class Jotage_armazem extends JavaPlugin {
     @Override
     public void onEnable() {
         CactusStorageManager cactusStorageManager = new CactusStorageManager();
-        CactusArmazemGUI cactusArmazemGUI = new CactusArmazemGUI(cactusStorageManager);
+        ValorUpgrade valorUpgrade = new ValorUpgrade(10, new HashMap<>(), new HashMap<>(), new HashMap<>());
+        CactusArmazemGUI cactusArmazemGUI = new CactusArmazemGUI(cactusStorageManager, valorUpgrade);
 
         if (!setupEconomy()) {
             getLogger().severe("Dependência do Vault não encontrada! O plugin será desativado.");
@@ -33,7 +37,7 @@ public final class Jotage_armazem extends JavaPlugin {
 
         getServer().getConsoleSender().sendMessage("§d[JotaGe-Armazem] iniciado com sucesso!");
 
-        EventManager.registerEvents(this, cactusStorageManager, cactusArmazemGUI);
+        EventManager.registerEvents(this, cactusStorageManager, cactusArmazemGUI, valorUpgrade);
 
         Objects.requireNonNull(getCommand("armazem")).setExecutor(new CactusCommand());
 
