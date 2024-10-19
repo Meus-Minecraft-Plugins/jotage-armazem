@@ -6,6 +6,7 @@ import com.joaoguedes.jotagearmazem.menus.CactusArmazemGUI;
 import com.joaoguedes.jotagearmazem.utils.CactusStorageManager;
 import com.joaoguedes.jotagearmazem.utils.upgrade.UpgradeData;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.FortuneUpgrade;
+import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.LimitUpgrade;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.ValorUpgrade;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -25,7 +26,8 @@ public final class JotageArmazem extends JavaPlugin {
         CactusStorageManager cactusStorageManager = new CactusStorageManager();
         ValorUpgrade valorUpgrade = new ValorUpgrade(new UpgradeData(), config.getInt("upgrades.valor.maxlevel"));
         FortuneUpgrade fortuneUpgrade = new FortuneUpgrade(new UpgradeData(), config.getInt("upgrades.fortune.maxlevel"));
-        CactusArmazemGUI cactusArmazemGUI = new CactusArmazemGUI(cactusStorageManager, valorUpgrade, fortuneUpgrade);
+        LimitUpgrade limitUpgrade = new LimitUpgrade(new UpgradeData(), config.getInt("upgrades.limit.maxlevel"));
+        CactusArmazemGUI cactusArmazemGUI = new CactusArmazemGUI(cactusStorageManager, valorUpgrade, fortuneUpgrade, limitUpgrade);
 
         if (!setupEconomy()) {
             getLogger().severe("Dependência do Vault não encontrada! O plugin será desativado.");
@@ -41,7 +43,7 @@ public final class JotageArmazem extends JavaPlugin {
 
         getServer().getConsoleSender().sendMessage("§d[JotaGe-Armazem] iniciado com sucesso!");
 
-        EventManager.registerEvents(this, cactusStorageManager, cactusArmazemGUI, valorUpgrade, fortuneUpgrade);
+        EventManager.registerEvents(this, cactusStorageManager, valorUpgrade, fortuneUpgrade, limitUpgrade);
 
         Objects.requireNonNull(getCommand("armazem")).setExecutor(new CactusCommand());
 

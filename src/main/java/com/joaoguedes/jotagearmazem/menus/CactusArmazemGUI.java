@@ -3,6 +3,7 @@ package com.joaoguedes.jotagearmazem.menus;
 import com.joaoguedes.jotagearmazem.utils.CactusStorageManager;
 import com.joaoguedes.jotagearmazem.JotageArmazem;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.FortuneUpgrade;
+import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.LimitUpgrade;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.ValorUpgrade;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -20,11 +21,13 @@ public class CactusArmazemGUI {
     private final CactusStorageManager cactusStorageManager;
     private final ValorUpgrade valorUpgrade;
     private final FortuneUpgrade fortuneUpgrade;
+    private final LimitUpgrade limitUpgrade;
 
-    public CactusArmazemGUI(CactusStorageManager cactusStorageManager, ValorUpgrade valorUpgrade, FortuneUpgrade fortuneUpgrade) {
+    public CactusArmazemGUI(CactusStorageManager cactusStorageManager, ValorUpgrade valorUpgrade, FortuneUpgrade fortuneUpgrade, LimitUpgrade limitUpgrade) {
         this.cactusStorageManager = cactusStorageManager;
         this.valorUpgrade = valorUpgrade;
         this.fortuneUpgrade = fortuneUpgrade;
+        this.limitUpgrade = limitUpgrade;
     }
 
     public void openCactoArmazem(UUID playerUUID) {
@@ -49,8 +52,8 @@ public class CactusArmazemGUI {
         List<String> venderLore = new ArrayList<>();
 
         venderLore.add("");
-        venderLore.add("§7Quantidade: §a" + cactusCount);
-        long totalValue = cactusCount * valorUpgrade.getCactusValue(playerUUID);
+        venderLore.add("§7Quantidade: §a" + cactusCount + "§7 x§6§l " + fortuneUpgrade.getFortuneValue(playerUUID));
+        long totalValue = cactusCount * valorUpgrade.getCactusValue(playerUUID) * fortuneUpgrade.getFortuneValue(playerUUID);
         Economy economy = JotageArmazem.getEconomy();
         venderLore.add("§7Valor individual: §a" + economy.format(valorUpgrade.getCactusValue(playerUUID)));
         venderLore.add("§7Valor total: §a" + economy.format(totalValue));
@@ -74,11 +77,10 @@ public class CactusArmazemGUI {
         upgradeLore.add("");
         upgradeLore.add("§7Valor: §a" + valorUpgrade.getCurrentLevel(playerUUID));
         upgradeLore.add("§7Fortuna: §a" + fortuneUpgrade.getCurrentLevel(playerUUID));
-        upgradeLore.add("§7Limite: §aX");
+        upgradeLore.add("§7Limite: §a " + limitUpgrade.getCurrentLevel(playerUUID));
         upgradeLore.add("");
         upgradeLore.add("§aClique para gerenciar os upgrades!");
         upgradeLore.add("");
-        upgradeLore.add("§c- EM BREVE -");
 
 
         upgradeMeta.setLore(upgradeLore);

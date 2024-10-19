@@ -5,6 +5,7 @@ import com.joaoguedes.jotagearmazem.menus.UpgradeArmazemGUI;
 import com.joaoguedes.jotagearmazem.utils.CactusStorageManager;
 import com.joaoguedes.jotagearmazem.JotageArmazem;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.FortuneUpgrade;
+import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.LimitUpgrade;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.ValorUpgrade;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.entity.Player;
@@ -18,11 +19,13 @@ public class CactusArmazemGuiListener implements Listener {
     private final CactusStorageManager cactusStorageManager;
     private final ValorUpgrade valorUpgrade;
     private final FortuneUpgrade fortuneUpgrade;
+    private final LimitUpgrade limitUpgrade;
 
-    public CactusArmazemGuiListener(CactusStorageManager cactusStorageManager, ValorUpgrade valorUpgrade, FortuneUpgrade fortuneUpgrade) {
+    public CactusArmazemGuiListener(CactusStorageManager cactusStorageManager, ValorUpgrade valorUpgrade, FortuneUpgrade fortuneUpgrade, LimitUpgrade limitUpgrade) {
         this.cactusStorageManager = cactusStorageManager;
         this.valorUpgrade = valorUpgrade;
         this.fortuneUpgrade = fortuneUpgrade;
+        this.limitUpgrade = limitUpgrade;
     }
 
     @EventHandler
@@ -46,7 +49,7 @@ public class CactusArmazemGuiListener implements Listener {
             }
 
             if (e.getSlot() == 13 && e.getCurrentItem() != null) {
-                new UpgradeArmazemGUI(valorUpgrade, fortuneUpgrade).openUpgradeArmazemGUI(playerUUID);
+                new UpgradeArmazemGUI(valorUpgrade, fortuneUpgrade, limitUpgrade).openUpgradeArmazemGUI(playerUUID);
             }
 
             if (e.getSlot() == 15 && e.getCurrentItem() != null) {

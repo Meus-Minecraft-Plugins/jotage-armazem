@@ -2,6 +2,7 @@ package com.joaoguedes.jotagearmazem.menus;
 
 import com.joaoguedes.jotagearmazem.JotageArmazem;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.FortuneUpgrade;
+import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.LimitUpgrade;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.ValorUpgrade;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -19,10 +20,12 @@ public class UpgradeArmazemGUI {
 
     private final ValorUpgrade valorUpgrade;
     private final FortuneUpgrade fortuneUpgrade;
+    private final LimitUpgrade limitUpgrade;
 
-    public UpgradeArmazemGUI(ValorUpgrade valorUpgrade, FortuneUpgrade fortuneUpgrade) {
+    public UpgradeArmazemGUI(ValorUpgrade valorUpgrade, FortuneUpgrade fortuneUpgrade, LimitUpgrade limitUpgrade) {
         this.valorUpgrade = valorUpgrade;
         this.fortuneUpgrade = fortuneUpgrade;
+        this.limitUpgrade = limitUpgrade;
     }
 
     public void openUpgradeArmazemGUI(UUID playerUUID) {
@@ -97,13 +100,15 @@ public class UpgradeArmazemGUI {
 
         List<String> limiteLore = new ArrayList<>();
 
+        Economy economy = JotageArmazem.getEconomy();
+
         limiteLore.add("§7Aumenta a capacidade do");
         limiteLore.add("§7armazém.");
         limiteLore.add("");
-        limiteLore.add("§fNível ≻ §71/100");
-        limiteLore.add("§fLimite ≻ §75K");
+        limiteLore.add("§fNível ≻ §7" + limitUpgrade.getCurrentLevel(playerUUID) + "/" + limitUpgrade.getMaxLevel());
+        limiteLore.add("§fLimite ≻ §7" + limitUpgrade.getLimitValue(playerUUID));
         limiteLore.add("");
-        limiteLore.add("§a➜ §fPreço ≻ §e10M");
+        limiteLore.add("§a➜ §fPreço ≻ §e" + economy.format(limitUpgrade.getCurrentPrice(playerUUID)));
         limiteLore.add("");
         limiteLore.add("§a▎ Clique para evoluir!");
 

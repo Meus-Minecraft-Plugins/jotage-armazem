@@ -2,7 +2,9 @@ package com.joaoguedes.jotagearmazem.listeners;
 
 import com.intellectualcrafters.plot.api.PlotAPI;
 import com.intellectualcrafters.plot.object.Plot;
+import com.joaoguedes.jotagearmazem.JotageArmazem;
 import com.joaoguedes.jotagearmazem.utils.CactusStorageManager;
+import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.LimitUpgrade;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
@@ -15,10 +17,12 @@ import java.util.UUID;
 public class CactusDropListener implements Listener {
     private final CactusStorageManager cactusStorageManager;
     private final PlotAPI plotAPI;
+    private final LimitUpgrade limitUpgrade;
 
-    public CactusDropListener(CactusStorageManager cactusStorageManager) {
+    public CactusDropListener(CactusStorageManager cactusStorageManager, LimitUpgrade limitUpgrade) {
         this.cactusStorageManager = cactusStorageManager;
         this.plotAPI = new PlotAPI();
+        this.limitUpgrade = limitUpgrade;
     }
 
     @EventHandler
@@ -32,7 +36,9 @@ public class CactusDropListener implements Listener {
                 UUID playerUUID = plot.getOwners().iterator().next();
 
                 if (playerUUID != null) {
-                    cactusStorageManager.addCactus(playerUUID, itemStack.getAmount());
+                    if (!(cactusStorageManager.getCactusCount(playerUUID) > (limitUpgrade.getLimitValue(playerUUID) - 1))) {
+                        cactusStorageManager.addCactus(playerUUID, itemStack.getAmount());
+                    }
                     item.remove();
                 }
             }
