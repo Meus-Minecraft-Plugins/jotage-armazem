@@ -18,10 +18,12 @@ import java.util.Objects;
 public final class JotageArmazem extends JavaPlugin {
     private static Economy economy = null;
     private static FileConfiguration config;
+    private static JotageArmazem instance;
 
     @Override
     public void onEnable() {
         config = this.getConfig();
+        instance = this;
 
         CactusStorageManager cactusStorageManager = new CactusStorageManager();
         ValorUpgrade valorUpgrade = new ValorUpgrade(new UpgradeData(), config.getInt("upgrades.valor.maxlevel"));
@@ -43,9 +45,10 @@ public final class JotageArmazem extends JavaPlugin {
 
         getServer().getConsoleSender().sendMessage("§d[JotaGe-Armazem] iniciado com sucesso!");
 
-        EventManager.registerEvents(this, cactusStorageManager, valorUpgrade, fortuneUpgrade, limitUpgrade);
-
         Objects.requireNonNull(getCommand("armazem")).setExecutor(new CactusCommand());
+
+        EventManager.registerEvents(this, cactusStorageManager, valorUpgrade, fortuneUpgrade, limitUpgrade, cactusArmazemGUI);
+
 
         saveDefaultConfig();
         config.options().copyDefaults(true);
@@ -73,4 +76,6 @@ public final class JotageArmazem extends JavaPlugin {
     public static FileConfiguration getPluginConfig() {
         return config;
     }
+
+    public static JotageArmazem getInstance() { return instance; }
 }

@@ -83,5 +83,12 @@
           <version>1.7</version>
           <scope>provided</scope>
       </dependency>
+      <dependency>
+          <groupId>com.connorlinfoot</groupId>
+          <artifactId>ActionBarAPI</artifactId>
+          <version>1.5.4</version>
+          <scope>system</scope>
+          <systemPath>${project.basedir}/libs/ActionBarAPI-1.5.4.jar</systemPath>
+      </dependency>
   </dependencies>
 </project>

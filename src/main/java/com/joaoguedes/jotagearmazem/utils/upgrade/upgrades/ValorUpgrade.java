@@ -47,4 +47,5 @@ public class ValorUpgrade extends UpgradeBase {
     public void setCactusValue(UUID playerUUID, long value) {
         playerCactusValues.put(playerUUID, value);
     }
+
 }

@@ -8,8 +8,10 @@ import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.ValorUpgrade;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -52,9 +54,9 @@ public class CactusArmazemGUI {
         List<String> venderLore = new ArrayList<>();
 
         venderLore.add("");
-        venderLore.add("§7Quantidade: §a" + cactusCount + "§7 x§6§l " + fortuneUpgrade.getFortuneValue(playerUUID));
-        long totalValue = cactusCount * valorUpgrade.getCactusValue(playerUUID) * fortuneUpgrade.getFortuneValue(playerUUID);
         Economy economy = JotageArmazem.getEconomy();
+        venderLore.add("§7Quantidade: §a" + economy.format(cactusCount));
+        long totalValue = cactusCount * valorUpgrade.getCactusValue(playerUUID) * fortuneUpgrade.getFortuneValue(playerUUID);
         venderLore.add("§7Valor individual: §a" + economy.format(valorUpgrade.getCactusValue(playerUUID)));
         venderLore.add("§7Valor total: §a" + economy.format(totalValue));
         venderLore.add("");
@@ -73,11 +75,20 @@ public class CactusArmazemGUI {
         ItemMeta upgradeMeta = upgradeItem.getItemMeta();
         upgradeMeta.setDisplayName("§cUpgrades");
 
+        Economy economy = JotageArmazem.getEconomy();
+
         List<String> upgradeLore = new ArrayList<>();
         upgradeLore.add("");
-        upgradeLore.add("§7Valor: §a" + valorUpgrade.getCurrentLevel(playerUUID));
-        upgradeLore.add("§7Fortuna: §a" + fortuneUpgrade.getCurrentLevel(playerUUID));
-        upgradeLore.add("§7Limite: §a " + limitUpgrade.getCurrentLevel(playerUUID));
+        upgradeLore.add("§7Valor: §a" + economy.format(valorUpgrade.getCactusValue(playerUUID)));
+        upgradeLore.add("§7Fortuna: §a" + fortuneUpgrade.getFortuneValue(playerUUID));
+        upgradeLore.add("§7Limite: §a " + economy.format(limitUpgrade.getLimitValue(playerUUID)));
+        upgradeLore.add("");
+        if (valorUpgrade.getCurrentLevel(playerUUID) == JotageArmazem.getPluginConfig().getInt("upgrades.valor.maxlevel") && fortuneUpgrade.getCurrentLevel(playerUUID) == JotageArmazem.getPluginConfig().getInt("upgrades.fortune.maxlevel") && limitUpgrade.getCurrentLevel(playerUUID) == JotageArmazem.getPluginConfig().getInt("upgrades.limit.maxlevel")) {
+            upgradeMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1,true);
+            upgradeMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+
+            upgradeLore.add("§6§lMAX");
+        }
         upgradeLore.add("");
         upgradeLore.add("§aClique para gerenciar os upgrades!");
         upgradeLore.add("");

@@ -45,7 +45,11 @@ public class UpgradeArmazemGUIListener implements Listener {
                 long currentPrice = valorUpgrade.getCurrentPrice(playerUUID);
                 if (economy.getBalance(player) >= currentPrice) {
                     valorUpgrade.applyValorUpgrade(player);
-                    economy.withdrawPlayer(player, currentPrice);
+                    if (valorUpgrade.getCurrentLevel(playerUUID) == 1) {
+                        economy.withdrawPlayer(player, JotageArmazem.getPluginConfig().getLong("upgrades.valor.inicialprice"));
+                    } else {
+                        economy.withdrawPlayer(player, currentPrice);
+                    }
                     UpgradeArmazemGUI upgradeGUI = new UpgradeArmazemGUI(valorUpgrade, fortuneUpgrade, limitUpgrade);
                     ItemStack newValorItem = upgradeGUI.createValorItem(playerUUID);
                     e.getInventory().setItem(11, newValorItem);
@@ -58,7 +62,11 @@ public class UpgradeArmazemGUIListener implements Listener {
                 long currentPrice = fortuneUpgrade.getCurrentPrice(playerUUID);
                 if (economy.getBalance(player) >= currentPrice) {
                     fortuneUpgrade.applyFortuneUpgrade(player);
-                    economy.withdrawPlayer(player, currentPrice);
+                    if (fortuneUpgrade.getCurrentLevel(playerUUID) == 1) {
+                        economy.withdrawPlayer(player, JotageArmazem.getPluginConfig().getLong("upgrades.fortune.inicialprice"));
+                    } else {
+                        economy.withdrawPlayer(player, currentPrice);
+                    }
                     UpgradeArmazemGUI upgradeGUI = new UpgradeArmazemGUI(valorUpgrade, fortuneUpgrade, limitUpgrade);
                     ItemStack newFortuneItem = upgradeGUI.createFortunaItem(playerUUID);
                     e.getInventory().setItem(13, newFortuneItem);
@@ -71,7 +79,11 @@ public class UpgradeArmazemGUIListener implements Listener {
                 long currentPrice = limitUpgrade.getCurrentPrice(playerUUID);
                 if (economy.getBalance(player) >= currentPrice) {
                     limitUpgrade.applyLimitUpgrade(player);
-                    economy.withdrawPlayer(player, currentPrice);
+                    if (limitUpgrade.getCurrentLevel(playerUUID) == 2) {
+                        economy.withdrawPlayer(player, JotageArmazem.getPluginConfig().getLong("upgrades.limit.inicialprice"));
+                    } else {
+                        economy.withdrawPlayer(player, currentPrice);
+                    }
                     UpgradeArmazemGUI upgradeGUI = new UpgradeArmazemGUI(valorUpgrade, fortuneUpgrade, limitUpgrade);
                     ItemStack newLimiteItem = upgradeGUI.createLimiteItem(playerUUID);
                     e.getInventory().setItem(15, newLimiteItem);
