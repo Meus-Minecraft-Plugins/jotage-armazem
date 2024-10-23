@@ -7,3 +7,6 @@ commands:
   armazem:
     description: "Abre o armazém do jogador"
     usage: "/armazem"
+  armazemreload:
+    description: "Recarrega a config do plugin"
+    usage: "/armazemreload"

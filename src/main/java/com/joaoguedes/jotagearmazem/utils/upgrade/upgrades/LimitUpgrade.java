@@ -11,9 +11,10 @@ import java.util.UUID;
 public class LimitUpgrade extends UpgradeBase {
 
     private final HashMap<UUID, Long> playerLimitValue = new HashMap<>();
+    private final String upgradeType = "limit";
 
-    public LimitUpgrade(UpgradeData upgradeData, int maxLevel) {
-        super(upgradeData, maxLevel);
+    public LimitUpgrade(UpgradeData upgradeData, int maxLevel, long inicialPrice) {
+        super(upgradeData, maxLevel, inicialPrice);
     }
 
     public long calculatePrice(int currentLevel, long price) {
@@ -27,11 +28,11 @@ public class LimitUpgrade extends UpgradeBase {
     public void applyLimitUpgrade(Player player) {
 
         UUID playerUUID = player.getUniqueId();
+
         int currentLevel = upgradeData.getLevel(playerUUID);
-
-        upgradeData.setInicialPrice(JotageArmazem.getPluginConfig().getLong("upgrades.limit.inicialprice"));
-
         super.applyUpgrade(player);
+
+        player.sendMessage("§2§l ARMAZEM §7◆ §fLimite melhorado! §7(§f " + (currentLevel) + "§7 ➝ §f" + (currentLevel + 1) + " §7)");
 
         long newLimitValue = calculateNewLimitValue(currentLevel, JotageArmazem.getPluginConfig().getInt("upgrades.limit.iniciallimitvalue"));
 
@@ -46,6 +47,10 @@ public class LimitUpgrade extends UpgradeBase {
 
     public void setLimitValue(UUID playerUUID, long value) {
         playerLimitValue.put(playerUUID, value);
+    }
+
+    public long getInicialPrice() {
+        return inicialPrice;
     }
 }
 

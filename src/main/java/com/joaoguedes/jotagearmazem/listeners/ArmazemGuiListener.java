@@ -1,5 +1,6 @@
 package com.joaoguedes.jotagearmazem.listeners;
 
+import com.joaoguedes.jotagearmazem.utils.AutoSell;
 import com.joaoguedes.jotagearmazem.utils.CactusStorageManager;
 import com.joaoguedes.jotagearmazem.menus.CactusArmazemGUI;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.FortuneUpgrade;
@@ -17,12 +18,14 @@ public class ArmazemGuiListener implements Listener {
     private final ValorUpgrade valorUpgrade;
     private final FortuneUpgrade fortuneUpgrade;
     private final LimitUpgrade limitUpgrade;
+    private final AutoSell autoSell;
 
-    public ArmazemGuiListener(CactusStorageManager cactusStorageManager, ValorUpgrade valorUpgrade, FortuneUpgrade fortuneUpgrade, LimitUpgrade limitUpgrade) {
+    public ArmazemGuiListener(CactusStorageManager cactusStorageManager, ValorUpgrade valorUpgrade, FortuneUpgrade fortuneUpgrade, LimitUpgrade limitUpgrade, AutoSell autoSell) {
         this.cactusStorageManager = cactusStorageManager;
         this.valorUpgrade = valorUpgrade;
         this.fortuneUpgrade = fortuneUpgrade;
         this.limitUpgrade = limitUpgrade;
+        this.autoSell = autoSell;
     }
 
     @EventHandler
@@ -37,7 +40,7 @@ public class ArmazemGuiListener implements Listener {
             e.setCancelled(true);
 
             if (e.getSlot() == 12) {
-                new CactusArmazemGUI(cactusStorageManager, valorUpgrade, fortuneUpgrade, limitUpgrade).openCactoArmazem(playerUUID);
+                new CactusArmazemGUI(cactusStorageManager, valorUpgrade, fortuneUpgrade, limitUpgrade, autoSell).openCactoArmazem(playerUUID);
             }
         }
 

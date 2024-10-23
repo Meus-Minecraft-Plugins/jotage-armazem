@@ -1,9 +1,13 @@
 package com.joaoguedes.jotagearmazem;
 
 import com.joaoguedes.jotagearmazem.commands.CactusCommand;
+import com.joaoguedes.jotagearmazem.commands.ReloadCommand;
 import com.joaoguedes.jotagearmazem.listeners.EventManager;
 import com.joaoguedes.jotagearmazem.menus.CactusArmazemGUI;
+import com.joaoguedes.jotagearmazem.utils.AutoSell;
 import com.joaoguedes.jotagearmazem.utils.CactusStorageManager;
+import com.joaoguedes.jotagearmazem.utils.CustomHead;
+import com.joaoguedes.jotagearmazem.utils.data.PlayerDataManager;
 import com.joaoguedes.jotagearmazem.utils.upgrade.UpgradeData;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.FortuneUpgrade;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.LimitUpgrade;
@@ -25,11 +29,14 @@ public final class JotageArmazem extends JavaPlugin {
         config = this.getConfig();
         instance = this;
 
+        PlayerDataManager playerDataManager = new PlayerDataManager(getDataFolder());
+
         CactusStorageManager cactusStorageManager = new CactusStorageManager();
-        ValorUpgrade valorUpgrade = new ValorUpgrade(new UpgradeData(), config.getInt("upgrades.valor.maxlevel"));
-        FortuneUpgrade fortuneUpgrade = new FortuneUpgrade(new UpgradeData(), config.getInt("upgrades.fortune.maxlevel"));
-        LimitUpgrade limitUpgrade = new LimitUpgrade(new UpgradeData(), config.getInt("upgrades.limit.maxlevel"));
-        CactusArmazemGUI cactusArmazemGUI = new CactusArmazemGUI(cactusStorageManager, valorUpgrade, fortuneUpgrade, limitUpgrade);
+        ValorUpgrade valorUpgrade = new ValorUpgrade(new UpgradeData(), config.getInt("upgrades.valor.maxlevel"), config.getLong("upgrades.valor.inicialprice"));
+        FortuneUpgrade fortuneUpgrade = new FortuneUpgrade(new UpgradeData(), config.getInt("upgrades.fortune.maxlevel"), config.getLong("upgrades.fortune.inicialprice"));
+        LimitUpgrade limitUpgrade = new LimitUpgrade(new UpgradeData(), config.getInt("upgrades.limit.maxlevel"), config.getLong("upgrades.limit.inicialprice"));
+        AutoSell autoSell = new AutoSell();
+        CactusArmazemGUI cactusArmazemGUI = new CactusArmazemGUI(cactusStorageManager, valorUpgrade, fortuneUpgrade, limitUpgrade, autoSell);
 
         if (!setupEconomy()) {
             getLogger().severe("Dependência do Vault não encontrada! O plugin será desativado.");
@@ -46,8 +53,9 @@ public final class JotageArmazem extends JavaPlugin {
         getServer().getConsoleSender().sendMessage("§d[JotaGe-Armazem] iniciado com sucesso!");
 
         Objects.requireNonNull(getCommand("armazem")).setExecutor(new CactusCommand());
+        Objects.requireNonNull(getCommand("armazemreload")).setExecutor(new ReloadCommand(this));
 
-        EventManager.registerEvents(this, cactusStorageManager, valorUpgrade, fortuneUpgrade, limitUpgrade, cactusArmazemGUI);
+        EventManager.registerEvents(this, cactusStorageManager, valorUpgrade, fortuneUpgrade, limitUpgrade, cactusArmazemGUI, autoSell);
 
 
         saveDefaultConfig();

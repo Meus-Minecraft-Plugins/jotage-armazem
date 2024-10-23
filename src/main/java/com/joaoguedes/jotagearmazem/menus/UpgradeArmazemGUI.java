@@ -1,6 +1,7 @@
 package com.joaoguedes.jotagearmazem.menus;
 
 import com.joaoguedes.jotagearmazem.JotageArmazem;
+import com.joaoguedes.jotagearmazem.utils.CustomHead;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.FortuneUpgrade;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.LimitUpgrade;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.ValorUpgrade;
@@ -19,6 +20,8 @@ import java.util.List;
 import java.util.UUID;
 
 public class UpgradeArmazemGUI {
+
+    private final ItemStack backHead = CustomHead.getCustomTextureHead(CustomHead.backHead());
 
     private final ValorUpgrade valorUpgrade;
     private final FortuneUpgrade fortuneUpgrade;
@@ -44,7 +47,7 @@ public class UpgradeArmazemGUI {
 
     public ItemStack createValorItem(UUID playerUUID) {
         // Valor Upgrade Slot
-        ItemStack valorItem = new ItemStack(Material.GOLD_INGOT, 1);
+        ItemStack valorItem = CustomHead.getCustomTextureHead(CustomHead.valueHead());
         ItemMeta valorMeta = valorItem.getItemMeta();
         valorMeta.setDisplayName("§dValor");
 
@@ -55,8 +58,8 @@ public class UpgradeArmazemGUI {
         valorLore.add("§7Aumenta o valor unitário");
         valorLore.add("§7de cada cacto.");
         valorLore.add("");
-        valorLore.add("§fNível ≻ §7" + valorUpgrade.getCurrentLevel(playerUUID) + "/" + economy.format(valorUpgrade.getMaxLevel()));
-        valorLore.add("§fValor ≻ §7" + economy.format(valorUpgrade.getCactusValue(playerUUID)));
+        valorLore.add("§f Nível ≻ §7" + valorUpgrade.getCurrentLevel(playerUUID) + "/" + economy.format(valorUpgrade.getMaxLevel()));
+        valorLore.add("§f Valor ≻ §7" + economy.format(valorUpgrade.getCactusValue(playerUUID)));
         valorLore.add("");
         if (valorUpgrade.getCurrentLevel(playerUUID) == 1) {
             valorLore.add("§a➜ §fPreço ≻ §e" + economy.format(JotageArmazem.getPluginConfig().getLong("upgrades.valor.inicialprice")));
@@ -68,7 +71,8 @@ public class UpgradeArmazemGUI {
             valorLore.add("§a➜ §fPreço ≻ §e" + economy.format(valorUpgrade.getCurrentPrice(playerUUID)));
         }
         valorLore.add("");
-        valorLore.add("§a▎ Clique para evoluir!");
+        valorLore.add("§7 ● §aClique para evoluir!");
+        valorLore.add("");
 
         valorMeta.setLore(valorLore);
         valorItem.setItemMeta(valorMeta);
@@ -78,7 +82,7 @@ public class UpgradeArmazemGUI {
 
     public ItemStack createFortunaItem(UUID playerUUID) {
         // Valor Upgrade Slot
-        ItemStack fortunaItem = new ItemStack(Material.EMERALD, 1);
+        ItemStack fortunaItem = CustomHead.getCustomTextureHead(CustomHead.fortuneHead());
         ItemMeta fortunaMeta = fortunaItem.getItemMeta();
         fortunaMeta.setDisplayName("§dFortuna");
 
@@ -89,8 +93,8 @@ public class UpgradeArmazemGUI {
         fortunaLore.add("§7Multiplica o drop dos");
         fortunaLore.add("§7cactos.");
         fortunaLore.add("");
-        fortunaLore.add("§fNível ≻ §7" + fortuneUpgrade.getCurrentLevel(playerUUID) + "/" + fortuneUpgrade.getMaxLevel());
-        fortunaLore.add("§fFortuna ≻ §7" + fortuneUpgrade.getFortuneValue(playerUUID));
+        fortunaLore.add("§f Nível ≻ §7" + fortuneUpgrade.getCurrentLevel(playerUUID) + "/" + fortuneUpgrade.getMaxLevel());
+        fortunaLore.add("§f Fortuna ≻ §7" + fortuneUpgrade.getFortuneValue(playerUUID));
         fortunaLore.add("");
         if (fortuneUpgrade.getCurrentLevel(playerUUID) == 1) {
             fortunaLore.add("§a➜ §fPreço ≻ §e" + economy.format(JotageArmazem.getPluginConfig().getLong("upgrades.fortune.inicialprice")));
@@ -102,7 +106,8 @@ public class UpgradeArmazemGUI {
             fortunaLore.add("§a➜ §fPreço ≻ §e" + economy.format(fortuneUpgrade.getCurrentPrice(playerUUID)));
         }
         fortunaLore.add("");
-        fortunaLore.add("§a▎ Clique para evoluir!");
+        fortunaLore.add("§7 ● §aClique para evoluir!");
+        fortunaLore.add("");
 
         fortunaMeta.setLore(fortunaLore);
         fortunaItem.setItemMeta(fortunaMeta);
@@ -112,7 +117,7 @@ public class UpgradeArmazemGUI {
 
     public ItemStack createLimiteItem(UUID playerUUID) {
         // Valor Upgrade Slot
-        ItemStack limiteItem = new ItemStack(Material.NETHER_STAR, 1);
+        ItemStack limiteItem = CustomHead.getCustomTextureHead(CustomHead.limitHead());
         ItemMeta limiteMeta = limiteItem.getItemMeta();
         limiteMeta.setDisplayName("§dLimite");
 
@@ -123,20 +128,21 @@ public class UpgradeArmazemGUI {
         limiteLore.add("§7Aumenta a capacidade do");
         limiteLore.add("§7armazém.");
         limiteLore.add("");
-        limiteLore.add("§fNível ≻ §7" + limitUpgrade.getCurrentLevel(playerUUID) + "/" + limitUpgrade.getMaxLevel());
-        limiteLore.add("§fLimite ≻ §7" + limitUpgrade.getLimitValue(playerUUID));
+        limiteLore.add("§f Nível ≻ §7" + limitUpgrade.getCurrentLevel(playerUUID) + "/" + limitUpgrade.getMaxLevel());
+        limiteLore.add("§f Limite ≻ §7" + limitUpgrade.getLimitValue(playerUUID));
         limiteLore.add("");
         if (limitUpgrade.getCurrentLevel(playerUUID) == 1) {
             limiteLore.add("§a➜ §fPreço ≻ §e" + economy.format(JotageArmazem.getPluginConfig().getLong("upgrades.limit.inicialprice")));
         } else if (limitUpgrade.getCurrentLevel(playerUUID) == JotageArmazem.getPluginConfig().getInt("upgrades.limit.maxlevel")) {
             limiteLore.add("§a➜ §fNível ≻ §6§lMAX");
-            limiteMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
+            limiteMeta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
             limiteMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         } else {
             limiteLore.add("§a➜ §fPreço ≻ §e" + economy.format(limitUpgrade.getCurrentPrice(playerUUID)));
         }
         limiteLore.add("");
-        limiteLore.add("§a▎ Clique para evoluir!");
+        limiteLore.add("§7 ● §aClique para evoluir!");
+        limiteLore.add("");
 
         limiteMeta.setLore(limiteLore);
         limiteItem.setItemMeta(limiteMeta);
@@ -146,14 +152,13 @@ public class UpgradeArmazemGUI {
 
     public ItemStack createBackItem() {
         // Valor Upgrade Slot
-        ItemStack backItem = new ItemStack(Material.ARROW, 1);
+        ItemStack backItem = backHead;
         ItemMeta backMeta = backItem.getItemMeta();
-        backMeta.setDisplayName("§cVoltar");
+        backMeta.setDisplayName(" ");
 
         List<String> backLore = new ArrayList<>();
 
-        backLore.add("");
-        backLore.add("§f▎ Clique para voltar a página!");
+        backLore.add("§7 ● §cVOLTAR §7●");
         backLore.add("");
 
         backMeta.setLore(backLore);

@@ -1,7 +1,9 @@
 package com.joaoguedes.jotagearmazem.menus;
 
+import com.joaoguedes.jotagearmazem.utils.AutoSell;
 import com.joaoguedes.jotagearmazem.utils.CactusStorageManager;
 import com.joaoguedes.jotagearmazem.JotageArmazem;
+import com.joaoguedes.jotagearmazem.utils.CustomHead;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.FortuneUpgrade;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.LimitUpgrade;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.ValorUpgrade;
@@ -20,16 +22,21 @@ import java.util.List;
 import java.util.UUID;
 
 public class CactusArmazemGUI {
+
+    private final ItemStack backHead = CustomHead.getCustomTextureHead(CustomHead.backHead());
+
     private final CactusStorageManager cactusStorageManager;
     private final ValorUpgrade valorUpgrade;
     private final FortuneUpgrade fortuneUpgrade;
     private final LimitUpgrade limitUpgrade;
+    private final AutoSell autoSell;
 
-    public CactusArmazemGUI(CactusStorageManager cactusStorageManager, ValorUpgrade valorUpgrade, FortuneUpgrade fortuneUpgrade, LimitUpgrade limitUpgrade) {
+    public CactusArmazemGUI(CactusStorageManager cactusStorageManager, ValorUpgrade valorUpgrade, FortuneUpgrade fortuneUpgrade, LimitUpgrade limitUpgrade, AutoSell autoSell) {
         this.cactusStorageManager = cactusStorageManager;
         this.valorUpgrade = valorUpgrade;
         this.fortuneUpgrade = fortuneUpgrade;
         this.limitUpgrade = limitUpgrade;
+        this.autoSell = autoSell;
     }
 
     public void openCactoArmazem(UUID playerUUID) {
@@ -38,7 +45,7 @@ public class CactusArmazemGUI {
         Inventory cactoArmazem = Bukkit.createInventory(null, 27, "Armazem de Cactos");
         cactoArmazem.setItem(11, createVenderItem(playerUUID));
         cactoArmazem.setItem(13, createUpgradeItem(playerUUID));
-        cactoArmazem.setItem(15, createAutoSellItem());
+        cactoArmazem.setItem(15, createAutoSellItem(autoSell.isAutoSellActive(player)));
         cactoArmazem.setItem(26, createBackItem());
 
         player.openInventory(cactoArmazem);
@@ -47,7 +54,7 @@ public class CactusArmazemGUI {
     public ItemStack createVenderItem(UUID playerUUID) {
         // Cactus Venda Slot
         int cactusCount = cactusStorageManager.getCactusCount(playerUUID);
-        ItemStack venderItem = new ItemStack(Material.STAINED_CLAY, 1, (short) 5);
+        ItemStack venderItem = CustomHead.getCustomTextureHead(CustomHead.cactusBagHead());
         ItemMeta venderMeta = venderItem.getItemMeta();
         venderMeta.setDisplayName("§aVender");
 
@@ -56,11 +63,11 @@ public class CactusArmazemGUI {
         venderLore.add("");
         Economy economy = JotageArmazem.getEconomy();
         venderLore.add("§7Quantidade: §a" + economy.format(cactusCount));
-        long totalValue = cactusCount * valorUpgrade.getCactusValue(playerUUID) * fortuneUpgrade.getFortuneValue(playerUUID);
+        long totalValue = cactusCount * valorUpgrade.getCactusValue(playerUUID);
         venderLore.add("§7Valor individual: §a" + economy.format(valorUpgrade.getCactusValue(playerUUID)));
         venderLore.add("§7Valor total: §a" + economy.format(totalValue));
         venderLore.add("");
-        venderLore.add("§aClique para vender!");
+        venderLore.add("§7 ◆ §aClique para vender!");
         venderLore.add("");
 
         venderMeta.setLore(venderLore);
@@ -88,9 +95,9 @@ public class CactusArmazemGUI {
             upgradeMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
             upgradeLore.add("§6§lMAX");
+            upgradeLore.add("");
         }
-        upgradeLore.add("");
-        upgradeLore.add("§aClique para gerenciar os upgrades!");
+        upgradeLore.add("§7 ◆ §aClique para gerenciar os upgrades!");
         upgradeLore.add("");
 
 
@@ -100,20 +107,18 @@ public class CactusArmazemGUI {
         return upgradeItem;
     }
 
-    public ItemStack createAutoSellItem() {
+    public ItemStack createAutoSellItem(Boolean isEnable) {
         // Cactus AutoSell Slot
-        ItemStack autoSellItem = new ItemStack(Material.LEVER, 1);
+        ItemStack autoSellItem = isEnable ? CustomHead.getCustomTextureHead(CustomHead.checkedHead()) : CustomHead.getCustomTextureHead(CustomHead.unCheckedHead());
         ItemMeta autoSellMeta = autoSellItem.getItemMeta();
         autoSellMeta.setDisplayName("§eVenda Automática");
 
         List<String> autoSellLore = new ArrayList<>();
         autoSellLore.add("");
-        autoSellLore.add("§7Status: §cOFF");
+        autoSellLore.add(isEnable ? "§7Status: §aON" : "§7Status: §cOFF");
         autoSellLore.add("");
-        autoSellLore.add("§aClique para ligar a venda automática!");
+        autoSellLore.add("§7 ◆ §aClique para ligar a venda automática!");
         autoSellLore.add("");
-        autoSellLore.add("§c- EM BREVE -");
-
 
         autoSellMeta.setLore(autoSellLore);
         autoSellItem.setItemMeta(autoSellMeta);
@@ -123,14 +128,13 @@ public class CactusArmazemGUI {
 
     public ItemStack createBackItem() {
         // Valor Upgrade Slot
-        ItemStack backItem = new ItemStack(Material.ARROW, 1);
+        ItemStack backItem = backHead;
         ItemMeta backMeta = backItem.getItemMeta();
-        backMeta.setDisplayName("§cVoltar");
+        backMeta.setDisplayName(" ");
 
         List<String> backLore = new ArrayList<>();
 
-        backLore.add("");
-        backLore.add("§f▎ Clique para voltar a página!");
+        backLore.add("§7 ● §cVOLTAR §7●");
         backLore.add("");
 
         backMeta.setLore(backLore);

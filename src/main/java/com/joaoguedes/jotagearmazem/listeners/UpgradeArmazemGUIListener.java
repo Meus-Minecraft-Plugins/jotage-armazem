@@ -3,6 +3,7 @@ package com.joaoguedes.jotagearmazem.listeners;
 import com.joaoguedes.jotagearmazem.JotageArmazem;
 import com.joaoguedes.jotagearmazem.menus.CactusArmazemGUI;
 import com.joaoguedes.jotagearmazem.menus.UpgradeArmazemGUI;
+import com.joaoguedes.jotagearmazem.utils.AutoSell;
 import com.joaoguedes.jotagearmazem.utils.CactusStorageManager;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.FortuneUpgrade;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.LimitUpgrade;
@@ -22,12 +23,14 @@ public class UpgradeArmazemGUIListener implements Listener {
     private final CactusStorageManager cactusStorageManager;
     private final FortuneUpgrade fortuneUpgrade;
     private final LimitUpgrade limitUpgrade;
+    private final AutoSell autoSell;
 
-    public UpgradeArmazemGUIListener(ValorUpgrade valorUpgrade, CactusStorageManager cactusStorageManager, FortuneUpgrade fortuneUpgrade, LimitUpgrade limitUpgrade) {
+    public UpgradeArmazemGUIListener(ValorUpgrade valorUpgrade, CactusStorageManager cactusStorageManager, FortuneUpgrade fortuneUpgrade, LimitUpgrade limitUpgrade, AutoSell autoSell) {
         this.valorUpgrade = valorUpgrade;
         this.cactusStorageManager = cactusStorageManager;
         this.fortuneUpgrade = fortuneUpgrade;
         this.limitUpgrade = limitUpgrade;
+        this.autoSell = autoSell;
     }
 
     @EventHandler
@@ -46,7 +49,7 @@ public class UpgradeArmazemGUIListener implements Listener {
                 if (economy.getBalance(player) >= currentPrice) {
                     valorUpgrade.applyValorUpgrade(player);
                     if (valorUpgrade.getCurrentLevel(playerUUID) == 1) {
-                        economy.withdrawPlayer(player, JotageArmazem.getPluginConfig().getLong("upgrades.valor.inicialprice"));
+                        economy.withdrawPlayer(player, valorUpgrade.getInicialPrice());
                     } else {
                         economy.withdrawPlayer(player, currentPrice);
                     }
@@ -60,10 +63,11 @@ public class UpgradeArmazemGUIListener implements Listener {
 
             if (e.getSlot() == 13 && e.getCurrentItem() != null) {
                 long currentPrice = fortuneUpgrade.getCurrentPrice(playerUUID);
+                System.out.println(currentPrice);
                 if (economy.getBalance(player) >= currentPrice) {
                     fortuneUpgrade.applyFortuneUpgrade(player);
                     if (fortuneUpgrade.getCurrentLevel(playerUUID) == 1) {
-                        economy.withdrawPlayer(player, JotageArmazem.getPluginConfig().getLong("upgrades.fortune.inicialprice"));
+                        economy.withdrawPlayer(player, fortuneUpgrade.getInicialPrice());
                     } else {
                         economy.withdrawPlayer(player, currentPrice);
                     }
@@ -80,7 +84,7 @@ public class UpgradeArmazemGUIListener implements Listener {
                 if (economy.getBalance(player) >= currentPrice) {
                     limitUpgrade.applyLimitUpgrade(player);
                     if (limitUpgrade.getCurrentLevel(playerUUID) == 2) {
-                        economy.withdrawPlayer(player, JotageArmazem.getPluginConfig().getLong("upgrades.limit.inicialprice"));
+                        economy.withdrawPlayer(player, limitUpgrade.getInicialPrice());
                     } else {
                         economy.withdrawPlayer(player, currentPrice);
                     }
@@ -93,7 +97,7 @@ public class UpgradeArmazemGUIListener implements Listener {
             }
 
             if (e.getSlot() == 26 && e.getCurrentItem() != null) {
-                CactusArmazemGUI cactusArmazemGUI = new CactusArmazemGUI(cactusStorageManager, valorUpgrade, fortuneUpgrade, limitUpgrade);
+                CactusArmazemGUI cactusArmazemGUI = new CactusArmazemGUI(cactusStorageManager, valorUpgrade, fortuneUpgrade, limitUpgrade, autoSell);
                 cactusArmazemGUI.openCactoArmazem(playerUUID);
             }
         }

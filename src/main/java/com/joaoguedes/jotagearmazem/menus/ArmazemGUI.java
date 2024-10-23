@@ -1,5 +1,6 @@
 package com.joaoguedes.jotagearmazem.menus;
 
+import com.joaoguedes.jotagearmazem.utils.CustomHead;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -11,42 +12,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArmazemGUI {
+
     public void openArmazem(Player player) {
-        // Criando a GUI principal do armazém com 27 slots
+        // Criando um item das cactos
         Inventory armazem = Bukkit.createInventory(null, 27, "Armazem");
 
-        // Criando um item representando os cactos
-        ItemStack cactusItem = new ItemStack(Material.CACTUS, 1);
+        // Criando um item das canas
+        ItemStack cactusItem = CustomHead.getCustomTextureHead(CustomHead.cactusHead());
         ItemMeta cactusMeta = cactusItem.getItemMeta();
-        cactusMeta.setDisplayName("§aArmazém de Cactos");
+        cactusMeta.setDisplayName("§a§lArmazém de Cactus");
 
         List<String> cactusLore = new ArrayList<>();
         cactusLore.add("");
-        cactusLore.add("§7Clique para acessar o armazém de cactos");
+        cactusLore.add("§7 ◆ Clique para acessar o armazém.");
         cactusLore.add("");
         cactusMeta.setLore(cactusLore);
         cactusItem.setItemMeta(cactusMeta);
 
-        // Definindo o item no slot 12
         armazem.setItem(12, cactusItem);
 
-        // Criando um item representando as canas
-        ItemStack caneItem = new ItemStack(Material.SUGAR_CANE, 1);
+        // Criando um item das canas
+        ItemStack caneItem = CustomHead.getCustomTextureHead(CustomHead.caneHead());
         ItemMeta caneMeta = caneItem.getItemMeta();
-        caneMeta.setDisplayName("§aArmazém de Cana");
+        caneMeta.setDisplayName("§a§lArmazém de Cana");
 
         List<String> caneLore = new ArrayList<>();
         caneLore.add("");
-        caneLore.add("§7Clique para acessar o armazém das canas!");
+        caneLore.add("§7 ◆ Clique para acessar o armazém.");
         caneLore.add("");
         caneLore.add("§c- EM BREVE -");
         caneMeta.setLore(caneLore);
         caneItem.setItemMeta(caneMeta);
 
-        // Definindo o item no slot 14
         armazem.setItem(14, caneItem);
 
-        // Exibindo a GUI para o jogador
         player.openInventory(armazem);
     }
 }

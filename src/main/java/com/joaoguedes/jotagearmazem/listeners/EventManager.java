@@ -1,6 +1,7 @@
 package com.joaoguedes.jotagearmazem.listeners;
 
 import com.joaoguedes.jotagearmazem.menus.CactusArmazemGUI;
+import com.joaoguedes.jotagearmazem.utils.AutoSell;
 import com.joaoguedes.jotagearmazem.utils.CactusStorageManager;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.FortuneUpgrade;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.LimitUpgrade;
@@ -10,15 +11,17 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class EventManager {
-    public static void registerEvents(JavaPlugin plugin, CactusStorageManager cactusStorageManager, ValorUpgrade valorUpgrade, FortuneUpgrade fortuneUpgrade, LimitUpgrade limitUpgrade, CactusArmazemGUI cactusArmazemGUI) {
+    public static void registerEvents(JavaPlugin plugin, CactusStorageManager cactusStorageManager, ValorUpgrade valorUpgrade, FortuneUpgrade fortuneUpgrade, LimitUpgrade limitUpgrade, CactusArmazemGUI cactusArmazemGUI, AutoSell autoSell) {
         PluginManager pm = Bukkit.getPluginManager();
 
         pm.registerEvents(new CactusDropListener(cactusStorageManager, limitUpgrade, fortuneUpgrade), plugin);
 
-        pm.registerEvents(new ArmazemGuiListener(cactusStorageManager, valorUpgrade, fortuneUpgrade, limitUpgrade), plugin);
+        pm.registerEvents(new ArmazemGuiListener(cactusStorageManager, valorUpgrade, fortuneUpgrade, limitUpgrade, autoSell), plugin);
 
-        pm.registerEvents(new CactusArmazemGuiListener(cactusStorageManager, valorUpgrade, fortuneUpgrade, limitUpgrade, cactusArmazemGUI), plugin);
+        pm.registerEvents(new CactusArmazemGuiListener(cactusStorageManager, valorUpgrade, fortuneUpgrade, limitUpgrade, cactusArmazemGUI, autoSell), plugin);
 
-        pm.registerEvents(new UpgradeArmazemGUIListener(valorUpgrade, cactusStorageManager, fortuneUpgrade, limitUpgrade), plugin);
+        pm.registerEvents(new UpgradeArmazemGUIListener(valorUpgrade, cactusStorageManager, fortuneUpgrade, limitUpgrade, autoSell), plugin);
+
+        pm.registerEvents(new PlayerQuitListener(autoSell), plugin);
     }
 }

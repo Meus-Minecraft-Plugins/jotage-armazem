@@ -4,6 +4,7 @@ import com.connorlinfoot.actionbarapi.ActionBarAPI;
 import com.joaoguedes.jotagearmazem.menus.ArmazemGUI;
 import com.joaoguedes.jotagearmazem.menus.CactusArmazemGUI;
 import com.joaoguedes.jotagearmazem.menus.UpgradeArmazemGUI;
+import com.joaoguedes.jotagearmazem.utils.AutoSell;
 import com.joaoguedes.jotagearmazem.utils.CactusStorageManager;
 import com.joaoguedes.jotagearmazem.JotageArmazem;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.FortuneUpgrade;
@@ -14,7 +15,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.UUID;
 
@@ -24,15 +24,15 @@ public class CactusArmazemGuiListener implements Listener {
     private final FortuneUpgrade fortuneUpgrade;
     private final LimitUpgrade limitUpgrade;
     private final CactusArmazemGUI cactusArmazemGUI;
-    private boolean autoSellStatus = false;
-    private int autoSellTaskId = -1;
+    private final AutoSell autoSell;
 
-    public CactusArmazemGuiListener(CactusStorageManager cactusStorageManager, ValorUpgrade valorUpgrade, FortuneUpgrade fortuneUpgrade, LimitUpgrade limitUpgrade, CactusArmazemGUI cactusArmazemGUI) {
+    public CactusArmazemGuiListener(CactusStorageManager cactusStorageManager, ValorUpgrade valorUpgrade, FortuneUpgrade fortuneUpgrade, LimitUpgrade limitUpgrade, CactusArmazemGUI cactusArmazemGUI, AutoSell autoSell) {
         this.cactusStorageManager = cactusStorageManager;
         this.valorUpgrade = valorUpgrade;
         this.fortuneUpgrade = fortuneUpgrade;
         this.limitUpgrade = limitUpgrade;
         this.cactusArmazemGUI = cactusArmazemGUI;
+        this.autoSell = autoSell;
     }
 
     @EventHandler
@@ -60,25 +60,13 @@ public class CactusArmazemGuiListener implements Listener {
             }
 
             if (e.getSlot() == 15 && e.getCurrentItem() != null) {
-                autoSellStatus = !autoSellStatus;
-                player.sendMessage("§fA venda automática está " + (autoSellStatus ? "§aativada!" : "§cdesativada!"));
-                cactusArmazemGUI.openCactoArmazem(playerUUID);
-
-                if (autoSellStatus) {
-                    autoSellTaskId = new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            if (!autoSellStatus) {
-                                this.cancel();
-                                return;
-                            }
-                            ActionBarAPI.sendActionBar(player, "§aVocê vendeu §6" + cactusStorageManager.getCactusCount(playerUUID) + "§a cactos por §6§l" + economy.format(cactusStorageManager.getCactusCount(playerUUID) * valorUpgrade.getCactusValue(playerUUID)));
-                            economy.depositPlayer(player, cactusStorageManager.getCactusCount(playerUUID) * valorUpgrade.getCactusValue(playerUUID));
-                            cactusStorageManager.clearCactus(playerUUID);
-                        }
-                    }.runTaskTimer(JotageArmazem.getInstance(), 0, 100L).getTaskId();
+                if (autoSell.isAutoSellActive(player)) {
+                    autoSell.disableAutoSell(player);
+                } else {
+                    autoSell.enableAutoSell(player, cactusStorageManager, valorUpgrade);
                 }
 
+                cactusArmazemGUI.openCactoArmazem(playerUUID);
             }
 
             if (e.getSlot() == 26 && e.getCurrentItem() != null) {

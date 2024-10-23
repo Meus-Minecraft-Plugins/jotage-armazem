@@ -7,18 +7,19 @@ import java.util.UUID;
 public abstract class UpgradeBase {
     protected final UpgradeData upgradeData;
     protected int maxLevel;
+    protected long inicialPrice;
 
-    public UpgradeBase(UpgradeData upgradeData, int maxLevel) {
+    public UpgradeBase(UpgradeData upgradeData, int maxLevel, long inicialPrice) {
         this.upgradeData = upgradeData;
         this.maxLevel = maxLevel;
+        this.inicialPrice = inicialPrice;
     }
 
-    public abstract long calculatePrice(int currentLevel, long price);
+    public abstract long calculatePrice(int currentLevel, long inicialPrice);
 
     public void applyUpgrade(Player player) {
         UUID playerUUID = player.getUniqueId();
         int currentLevel = upgradeData.getLevel(playerUUID);
-        long inicialPrice = upgradeData.getInicialPrice();
 
         if (currentLevel < maxLevel) {
             currentLevel++;
@@ -27,9 +28,8 @@ public abstract class UpgradeBase {
             upgradeData.setLevel(playerUUID, currentLevel);
             upgradeData.setPrice(playerUUID, newPrice);
 
-            player.sendMessage("§aSUCESSO! §fNovo nível: §6" + currentLevel);
         } else {
-            player.sendMessage("§cVocê chegou ao nível máximo!");
+            player.sendMessage("§2§l ARMAZEM §cVocê chegou ao nível máximo!");
         }
     }
 

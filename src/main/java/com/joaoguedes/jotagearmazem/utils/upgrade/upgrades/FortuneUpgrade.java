@@ -11,9 +11,10 @@ import java.util.UUID;
 public class FortuneUpgrade extends UpgradeBase {
 
     private final HashMap<UUID, Integer> playerFortuneValues = new HashMap<>();
+    private final String upgradeType = "fortune";
 
-    public FortuneUpgrade(UpgradeData upgradeData, int maxLevel) {
-        super(upgradeData, maxLevel);
+    public FortuneUpgrade(UpgradeData upgradeData, int maxLevel, long inicialPrice) {
+        super(upgradeData, maxLevel, inicialPrice);
     }
 
     public long calculatePrice(int currentLevel, long price) {
@@ -27,11 +28,11 @@ public class FortuneUpgrade extends UpgradeBase {
     public void applyFortuneUpgrade(Player player) {
 
         UUID playerUUID = player.getUniqueId();
+
         int currentLevel = upgradeData.getLevel(playerUUID);
-
-        upgradeData.setInicialPrice(JotageArmazem.getPluginConfig().getLong("upgrades.fortune.inicialprice"));
-
         super.applyUpgrade(player);
+
+        player.sendMessage("§2§l ARMAZEM §7◆ §fFortuna melhorada! §7(§f " + (currentLevel) + "§7 ➝ §f" + (currentLevel + 1) + " §7)");
 
         int newFortuneValue = calculateNewFortuneValue(currentLevel, JotageArmazem.getPluginConfig().getInt("upgrades.fortune.inicialfortunevalue"));
 
@@ -46,5 +47,9 @@ public class FortuneUpgrade extends UpgradeBase {
 
     public void setFortuneValue(UUID playerUUID, int fortuneLevel) {
         playerFortuneValues.put(playerUUID, fortuneLevel);
+    }
+
+    public long getInicialPrice() {
+        return inicialPrice;
     }
 }
