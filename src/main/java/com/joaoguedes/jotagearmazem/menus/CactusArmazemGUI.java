@@ -4,6 +4,7 @@ import com.joaoguedes.jotagearmazem.utils.AutoSell;
 import com.joaoguedes.jotagearmazem.utils.CactusStorageManager;
 import com.joaoguedes.jotagearmazem.JotageArmazem;
 import com.joaoguedes.jotagearmazem.utils.CustomHead;
+import com.joaoguedes.jotagearmazem.utils.data.PlayerDataManager;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.FortuneUpgrade;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.LimitUpgrade;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.ValorUpgrade;
@@ -53,7 +54,8 @@ public class CactusArmazemGUI {
 
     public ItemStack createVenderItem(UUID playerUUID) {
         // Cactus Venda Slot
-        int cactusCount = cactusStorageManager.getCactusCount(playerUUID);
+        PlayerDataManager playerDataManager = JotageArmazem.getInstance().getPlayerDataManager();
+        int cactusCount = playerDataManager.loadCactusCount(playerUUID);
         ItemStack venderItem = CustomHead.getCustomTextureHead(CustomHead.cactusBagHead());
         ItemMeta venderMeta = venderItem.getItemMeta();
         venderMeta.setDisplayName("§aVender");

@@ -1,6 +1,5 @@
 package com.joaoguedes.jotagearmazem.listeners;
 
-import com.connorlinfoot.actionbarapi.ActionBarAPI;
 import com.joaoguedes.jotagearmazem.menus.ArmazemGUI;
 import com.joaoguedes.jotagearmazem.menus.CactusArmazemGUI;
 import com.joaoguedes.jotagearmazem.menus.UpgradeArmazemGUI;
@@ -49,7 +48,7 @@ public class CactusArmazemGuiListener implements Listener {
             Economy economy = JotageArmazem.getEconomy();
 
             if (e.getSlot() == 11 && e.getCurrentItem() != null) {
-                player.sendMessage(String.format("§aVocê vendeu §6" + cactusCount + "§a cactos por §6§l" + economy.format(cactusCount * valorUpgrade.getCactusValue(playerUUID))));
+                player.sendMessage(String.format("§2§l ARMAZEM §7◆ §fVocê vendeu §6" + cactusCount + "§f cactos por §6§l" + economy.format(cactusCount * valorUpgrade.getCactusValue(playerUUID))));
                 economy.depositPlayer(player, cactusCount * valorUpgrade.getCactusValue(playerUUID));
                 cactusStorageManager.clearCactus(playerUUID);
                 cactusArmazemGUI.openCactoArmazem(playerUUID);

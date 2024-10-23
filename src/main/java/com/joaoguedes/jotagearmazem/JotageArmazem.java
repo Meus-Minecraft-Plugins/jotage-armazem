@@ -23,13 +23,14 @@ public final class JotageArmazem extends JavaPlugin {
     private static Economy economy = null;
     private static FileConfiguration config;
     private static JotageArmazem instance;
+    private PlayerDataManager playerDataManager;
 
     @Override
     public void onEnable() {
         config = this.getConfig();
         instance = this;
 
-        PlayerDataManager playerDataManager = new PlayerDataManager(getDataFolder());
+        playerDataManager = new PlayerDataManager(getDataFolder());
 
         CactusStorageManager cactusStorageManager = new CactusStorageManager();
         ValorUpgrade valorUpgrade = new ValorUpgrade(new UpgradeData(), config.getInt("upgrades.valor.maxlevel"), config.getLong("upgrades.valor.inicialprice"));
@@ -86,4 +87,6 @@ public final class JotageArmazem extends JavaPlugin {
     }
 
     public static JotageArmazem getInstance() { return instance; }
+
+    public PlayerDataManager getPlayerDataManager() { return playerDataManager; }
 }

@@ -32,7 +32,7 @@ public class LimitUpgrade extends UpgradeBase {
         int currentLevel = upgradeData.getLevel(playerUUID);
         super.applyUpgrade(player);
 
-        player.sendMessage("§2§l ARMAZEM §7◆ §fLimite melhorado! §7(§f " + (currentLevel) + "§7 ➝ §f" + (currentLevel + 1) + " §7)");
+        if (currentLevel != maxLevel) player.sendMessage("§2§l ARMAZEM §7◆ §fLimite melhorado! §7(§f " + (currentLevel) + "§7 ➝ §f" + (currentLevel + 1) + " §7)");
 
         long newLimitValue = calculateNewLimitValue(currentLevel, JotageArmazem.getPluginConfig().getInt("upgrades.limit.iniciallimitvalue"));
 

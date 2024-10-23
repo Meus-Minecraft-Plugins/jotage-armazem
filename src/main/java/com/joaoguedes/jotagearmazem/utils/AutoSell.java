@@ -2,6 +2,7 @@ package com.joaoguedes.jotagearmazem.utils;
 
 import com.connorlinfoot.actionbarapi.ActionBarAPI;
 import com.joaoguedes.jotagearmazem.JotageArmazem;
+import com.joaoguedes.jotagearmazem.utils.data.PlayerDataManager;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.ValorUpgrade;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.entity.Player;
@@ -14,6 +15,7 @@ import java.util.UUID;
 public class AutoSell {
 
     private final Map<UUID, Integer> autoSellStatus = new HashMap<>();
+    private PlayerDataManager playerDataManager = JotageArmazem.getInstance().getPlayerDataManager();
 
     public void enableAutoSell(Player player, CactusStorageManager cactusStorageManager, ValorUpgrade valorUpgrade) {
         UUID playerUUID = player.getUniqueId();

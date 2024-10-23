@@ -1,21 +1,26 @@
 package com.joaoguedes.jotagearmazem.utils;
 
+import com.joaoguedes.jotagearmazem.JotageArmazem;
+import com.joaoguedes.jotagearmazem.utils.data.PlayerDataManager;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class CactusStorageManager {
     private final Map<UUID, Integer> cactusArmazem = new HashMap<>();
+    private final PlayerDataManager playerDataManager = JotageArmazem.getInstance().getPlayerDataManager();
 
     public void addCactus(UUID playerUUID, int amount) {
-        int currentAmount = cactusArmazem.getOrDefault(playerUUID, 0);
-        cactusArmazem.put(playerUUID, currentAmount + amount);
+        int currentAmount = playerDataManager.loadCactusCount(playerUUID);
+        playerDataManager.saveCactusCount(playerUUID, currentAmount + amount);
     }
 
     public int getCactusCount(UUID playerUUID) {
-        return cactusArmazem.getOrDefault(playerUUID, 0);
+        return playerDataManager.loadCactusCount(playerUUID);
     }
+
     public void clearCactus(UUID playerUUID) {
-        cactusArmazem.put(playerUUID, 0);
+        playerDataManager.saveCactusCount(playerUUID, 0);
     }
 }

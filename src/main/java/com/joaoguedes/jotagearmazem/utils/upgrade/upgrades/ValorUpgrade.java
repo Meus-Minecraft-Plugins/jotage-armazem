@@ -32,7 +32,7 @@ public class ValorUpgrade extends UpgradeBase {
         int currentLevel = upgradeData.getLevel(playerUUID);
         super.applyUpgrade(player);
 
-        player.sendMessage("§2§l ARMAZEM §7◆ §fValor melhorado! §7(§f " + (currentLevel) + "§7 ➝ §f" + (currentLevel + 1) + " §7)");
+        if (currentLevel != maxLevel) player.sendMessage("§2§l ARMAZEM §7◆ §fValor melhorado! §7(§f " + (currentLevel) + "§7 ➝ §f" + (currentLevel + 1) + " §7)");
 
         long newCactusValue = calculateNewCactusValue(currentLevel, JotageArmazem.getPluginConfig().getLong("upgrades.valor.inicialcactusvalue"));
 
