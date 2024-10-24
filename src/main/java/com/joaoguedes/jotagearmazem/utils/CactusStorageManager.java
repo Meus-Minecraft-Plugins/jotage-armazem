@@ -13,7 +13,7 @@ public class CactusStorageManager {
 
     public void addCactus(UUID playerUUID, int amount) {
         int currentAmount = playerDataManager.loadCactusCount(playerUUID);
-        playerDataManager.saveCactusCount(playerUUID, currentAmount + amount);
+        playerDataManager.saveCactusCount(playerUUID, (currentAmount + amount));
     }
 
     public int getCactusCount(UUID playerUUID) {

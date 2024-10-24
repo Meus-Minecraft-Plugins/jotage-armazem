@@ -1,56 +1,59 @@
 package com.joaoguedes.jotagearmazem.utils.upgrade.upgrades;
 
 import com.joaoguedes.jotagearmazem.JotageArmazem;
-import com.joaoguedes.jotagearmazem.utils.upgrade.UpgradeBase;
-import com.joaoguedes.jotagearmazem.utils.upgrade.UpgradeData;
+import com.joaoguedes.jotagearmazem.utils.data.PlayerDataManager;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
 import java.util.UUID;
 
-public class LimitUpgrade extends UpgradeBase {
+public class LimitUpgrade {
 
-    private final HashMap<UUID, Long> playerLimitValue = new HashMap<>();
-    private final String upgradeType = "limit";
+    private final int inicialLimitValue;
+    private final long inicialPrice;
+    private final PlayerDataManager playerDataManager;
+    private final int maxLevel;
 
-    public LimitUpgrade(UpgradeData upgradeData, int maxLevel, long inicialPrice) {
-        super(upgradeData, maxLevel, inicialPrice);
+    public LimitUpgrade(PlayerDataManager playerDataManager, int inicialLimitValue, long inicialPrice, int maxLevel) {
+        this.playerDataManager = playerDataManager;
+        this.inicialLimitValue = inicialLimitValue;
+        this.inicialPrice = inicialPrice;
+        this.maxLevel = maxLevel;
     }
 
-    public long calculatePrice(int currentLevel, long price) {
-        return (price * 2) * currentLevel;
+    public long getValue(int currentLevel) {
+        return inicialLimitValue * (currentLevel * currentLevel * currentLevel);
     }
 
-    private int calculateNewLimitValue(int currentLevel, int limitValue) {
-        return limitValue * (currentLevel * 10 * currentLevel);
+    public long getPrice(int currentLevel) {
+        return currentLevel * inicialPrice;
     }
 
-    public void applyLimitUpgrade(Player player) {
+    public int getMaxLevel() {
+        return maxLevel;
+    }
+
+    public int getLevel(UUID playerUUID) {
+        return playerDataManager.loadLimitLevel(playerUUID);
+    }
+
+    public void setLevel(UUID playerUUID, int level) {
+        playerDataManager.setLimitLevel(playerUUID, level);
+    }
+
+    public void upgradeLimit(Player player) {
 
         UUID playerUUID = player.getUniqueId();
 
-        int currentLevel = upgradeData.getLevel(playerUUID);
-        super.applyUpgrade(player);
+        int currentLevel = playerDataManager.loadLimitLevel(playerUUID);
+
+        if (currentLevel < maxLevel) {
+            playerDataManager.setLimitLevel(playerUUID, (currentLevel + 1));
+        } else {
+            player.sendMessage("§2§l ARMAZEM §cVocê chegou ao nível máximo!");
+        }
 
         if (currentLevel != maxLevel) player.sendMessage("§2§l ARMAZEM §7◆ §fLimite melhorado! §7(§f " + (currentLevel) + "§7 ➝ §f" + (currentLevel + 1) + " §7)");
 
-        long newLimitValue = calculateNewLimitValue(currentLevel, JotageArmazem.getPluginConfig().getInt("upgrades.limit.iniciallimitvalue"));
-
-        if (currentLevel < maxLevel) {
-            setLimitValue(playerUUID, newLimitValue);
-        }
     }
 
-    public long getLimitValue(UUID playerUUID) {
-        return playerLimitValue.getOrDefault(playerUUID, JotageArmazem.getPluginConfig().getLong("upgrades.limit.iniciallimitvalue"));
-    }
-
-    public void setLimitValue(UUID playerUUID, long value) {
-        playerLimitValue.put(playerUUID, value);
-    }
-
-    public long getInicialPrice() {
-        return inicialPrice;
-    }
 }
-

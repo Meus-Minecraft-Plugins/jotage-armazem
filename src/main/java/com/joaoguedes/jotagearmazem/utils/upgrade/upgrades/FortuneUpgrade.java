@@ -1,6 +1,7 @@
 package com.joaoguedes.jotagearmazem.utils.upgrade.upgrades;
 
 import com.joaoguedes.jotagearmazem.JotageArmazem;
+import com.joaoguedes.jotagearmazem.utils.data.PlayerDataManager;
 import com.joaoguedes.jotagearmazem.utils.upgrade.UpgradeBase;
 import com.joaoguedes.jotagearmazem.utils.upgrade.UpgradeData;
 import org.bukkit.entity.Player;
@@ -8,48 +9,53 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class FortuneUpgrade extends UpgradeBase {
+public class FortuneUpgrade {
 
-    private final HashMap<UUID, Integer> playerFortuneValues = new HashMap<>();
-    private final String upgradeType = "fortune";
+    private final int inicialFortuneValue;
+    private final long inicialPrice;
+    private final PlayerDataManager playerDataManager;
+    private final int maxLevel;
 
-    public FortuneUpgrade(UpgradeData upgradeData, int maxLevel, long inicialPrice) {
-        super(upgradeData, maxLevel, inicialPrice);
+    public FortuneUpgrade(PlayerDataManager playerDataManager, int inicialFortuneValue, long inicialPrice, int maxLevel) {
+        this.playerDataManager = playerDataManager;
+        this.inicialFortuneValue = inicialFortuneValue;
+        this.inicialPrice = inicialPrice;
+        this.maxLevel = maxLevel;
     }
 
-    public long calculatePrice(int currentLevel, long price) {
-        return (price * 2) * currentLevel;
+    public int getValue(int currentLevel) {
+        return inicialFortuneValue * currentLevel;
     }
 
-    private int calculateNewFortuneValue(int currentLevel, int inicialFortune) {
-        return inicialFortune + currentLevel;
+    public long getPrice(int currentLevel) {
+        return inicialPrice * (currentLevel * currentLevel);
     }
 
-    public void applyFortuneUpgrade(Player player) {
+    public int getMaxLevel() {
+        return maxLevel;
+    }
+
+    public int getLevel(UUID playerUUID) {
+        return playerDataManager.loadFortuneLevel(playerUUID);
+    }
+
+    public void setLevel(UUID playerUUID, int level) {
+        playerDataManager.setFortuneLevel(playerUUID, level);
+    }
+
+    public void upgradeFortune(Player player) {
 
         UUID playerUUID = player.getUniqueId();
 
-        int currentLevel = upgradeData.getLevel(playerUUID);
-        super.applyUpgrade(player);
+        int currentLevel = playerDataManager.loadFortuneLevel(playerUUID);
+
+        if (currentLevel < maxLevel) {
+            playerDataManager.setFortuneLevel(playerUUID, (currentLevel + 1));
+        } else {
+            player.sendMessage("§2§l ARMAZEM §cVocê chegou ao nível máximo!");
+        }
 
         if (currentLevel != maxLevel) player.sendMessage("§2§l ARMAZEM §7◆ §fFortuna melhorada! §7(§f " + (currentLevel) + "§7 ➝ §f" + (currentLevel + 1) + " §7)");
 
-        int newFortuneValue = calculateNewFortuneValue(currentLevel, JotageArmazem.getPluginConfig().getInt("upgrades.fortune.inicialfortunevalue"));
-
-        if (currentLevel < maxLevel) {
-            setFortuneValue(playerUUID, newFortuneValue);
-        }
-    }
-
-    public int getFortuneValue(UUID playerUUID) {
-        return playerFortuneValues.getOrDefault(playerUUID, JotageArmazem.getPluginConfig().getInt("upgrades.fortune.inicialfortunevalue"));
-    }
-
-    public void setFortuneValue(UUID playerUUID, int fortuneLevel) {
-        playerFortuneValues.put(playerUUID, fortuneLevel);
-    }
-
-    public long getInicialPrice() {
-        return inicialPrice;
     }
 }

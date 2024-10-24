@@ -25,18 +25,16 @@ import java.util.UUID;
 public class CactusArmazemGUI {
 
     private final ItemStack backHead = CustomHead.getCustomTextureHead(CustomHead.backHead());
+    private final PlayerDataManager playerDataManager = JotageArmazem.getInstance().getPlayerDataManager();
+    private final ValorUpgrade valorUpgrade = JotageArmazem.getInstance().getValorUpgrade();
+    private final LimitUpgrade limitUpgrade = JotageArmazem.getInstance().getLimitUpgrade();
+    private final FortuneUpgrade fortuneUpgrade = JotageArmazem.getInstance().getFortuneUpgrade();
 
     private final CactusStorageManager cactusStorageManager;
-    private final ValorUpgrade valorUpgrade;
-    private final FortuneUpgrade fortuneUpgrade;
-    private final LimitUpgrade limitUpgrade;
     private final AutoSell autoSell;
 
-    public CactusArmazemGUI(CactusStorageManager cactusStorageManager, ValorUpgrade valorUpgrade, FortuneUpgrade fortuneUpgrade, LimitUpgrade limitUpgrade, AutoSell autoSell) {
+    public CactusArmazemGUI(CactusStorageManager cactusStorageManager, AutoSell autoSell) {
         this.cactusStorageManager = cactusStorageManager;
-        this.valorUpgrade = valorUpgrade;
-        this.fortuneUpgrade = fortuneUpgrade;
-        this.limitUpgrade = limitUpgrade;
         this.autoSell = autoSell;
     }
 
@@ -54,7 +52,6 @@ public class CactusArmazemGUI {
 
     public ItemStack createVenderItem(UUID playerUUID) {
         // Cactus Venda Slot
-        PlayerDataManager playerDataManager = JotageArmazem.getInstance().getPlayerDataManager();
         int cactusCount = playerDataManager.loadCactusCount(playerUUID);
         ItemStack venderItem = CustomHead.getCustomTextureHead(CustomHead.cactusBagHead());
         ItemMeta venderMeta = venderItem.getItemMeta();
@@ -65,8 +62,8 @@ public class CactusArmazemGUI {
         venderLore.add("");
         Economy economy = JotageArmazem.getEconomy();
         venderLore.add("§7Quantidade: §a" + economy.format(cactusCount));
-        long totalValue = cactusCount * valorUpgrade.getCactusValue(playerUUID);
-        venderLore.add("§7Valor individual: §a" + economy.format(valorUpgrade.getCactusValue(playerUUID)));
+        long totalValue = cactusCount * valorUpgrade.getValue(playerDataManager.loadValueLevel(playerUUID));
+        venderLore.add("§7Valor individual: §a" + economy.format(valorUpgrade.getValue(playerDataManager.loadValueLevel(playerUUID))));
         venderLore.add("§7Valor total: §a" + economy.format(totalValue));
         venderLore.add("");
         venderLore.add("§7 ◆ §aClique para vender!");
@@ -88,11 +85,11 @@ public class CactusArmazemGUI {
 
         List<String> upgradeLore = new ArrayList<>();
         upgradeLore.add("");
-        upgradeLore.add("§7Valor: §a" + economy.format(valorUpgrade.getCactusValue(playerUUID)));
-        upgradeLore.add("§7Fortuna: §a" + fortuneUpgrade.getFortuneValue(playerUUID));
-        upgradeLore.add("§7Limite: §a " + economy.format(limitUpgrade.getLimitValue(playerUUID)));
+        upgradeLore.add("§7Valor: §a" + economy.format(valorUpgrade.getValue(playerDataManager.loadValueLevel(playerUUID))));
+        upgradeLore.add("§7Fortuna: §a" + fortuneUpgrade.getValue(fortuneUpgrade.getLevel(playerUUID)));
+        upgradeLore.add("§7Limite: §a " + economy.format(limitUpgrade.getValue(limitUpgrade.getLevel(playerUUID))));
         upgradeLore.add("");
-        if (valorUpgrade.getCurrentLevel(playerUUID) == JotageArmazem.getPluginConfig().getInt("upgrades.valor.maxlevel") && fortuneUpgrade.getCurrentLevel(playerUUID) == JotageArmazem.getPluginConfig().getInt("upgrades.fortune.maxlevel") && limitUpgrade.getCurrentLevel(playerUUID) == JotageArmazem.getPluginConfig().getInt("upgrades.limit.maxlevel")) {
+        if (playerDataManager.loadValueLevel(playerUUID) == valorUpgrade.getMaxLevel() && fortuneUpgrade.getLevel(playerUUID) == fortuneUpgrade.getMaxLevel() && limitUpgrade.getLevel(playerUUID) == limitUpgrade.getMaxLevel()) {
             upgradeMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1,true);
             upgradeMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 

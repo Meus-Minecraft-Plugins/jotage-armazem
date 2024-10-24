@@ -19,14 +19,12 @@ import java.util.UUID;
 public class CactusDropListener implements Listener {
     private final CactusStorageManager cactusStorageManager;
     private final PlotAPI plotAPI;
-    private final LimitUpgrade limitUpgrade;
-    private final FortuneUpgrade fortuneUpgrade;
+    private final LimitUpgrade limitUpgrade = JotageArmazem.getInstance().getLimitUpgrade();
+    private final FortuneUpgrade fortuneUpgrade = JotageArmazem.getInstance().getFortuneUpgrade();
 
-    public CactusDropListener(CactusStorageManager cactusStorageManager, LimitUpgrade limitUpgrade, FortuneUpgrade fortuneUpgrade) {
+    public CactusDropListener(CactusStorageManager cactusStorageManager) {
         this.cactusStorageManager = cactusStorageManager;
         this.plotAPI = new PlotAPI();
-        this.limitUpgrade = limitUpgrade;
-        this.fortuneUpgrade = fortuneUpgrade;
     }
 
     @EventHandler
@@ -42,8 +40,8 @@ public class CactusDropListener implements Listener {
                 int totalCactus = playerDataManager.loadCactusCount(playerUUID);
 
                 if (playerUUID != null) {
-                    if (!(totalCactus >= (limitUpgrade.getLimitValue(playerUUID)))) {
-                        int amountToAdd = itemStack.getAmount() * fortuneUpgrade.getFortuneValue(playerUUID);
+                    if (!(totalCactus >= (limitUpgrade.getValue(limitUpgrade.getLevel(playerUUID))))) {
+                        int amountToAdd = itemStack.getAmount() * fortuneUpgrade.getValue(fortuneUpgrade.getLevel(playerUUID));
                         cactusStorageManager.addCactus(playerUUID, amountToAdd);
                     }
                     item.remove();

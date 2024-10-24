@@ -5,7 +5,6 @@ import com.joaoguedes.jotagearmazem.utils.CactusStorageManager;
 import com.joaoguedes.jotagearmazem.menus.CactusArmazemGUI;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.FortuneUpgrade;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.LimitUpgrade;
-import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.ValorUpgrade;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,16 +14,10 @@ import java.util.UUID;
 
 public class ArmazemGuiListener implements Listener {
     private final CactusStorageManager cactusStorageManager;
-    private final ValorUpgrade valorUpgrade;
-    private final FortuneUpgrade fortuneUpgrade;
-    private final LimitUpgrade limitUpgrade;
     private final AutoSell autoSell;
 
-    public ArmazemGuiListener(CactusStorageManager cactusStorageManager, ValorUpgrade valorUpgrade, FortuneUpgrade fortuneUpgrade, LimitUpgrade limitUpgrade, AutoSell autoSell) {
+    public ArmazemGuiListener(CactusStorageManager cactusStorageManager, AutoSell autoSell) {
         this.cactusStorageManager = cactusStorageManager;
-        this.valorUpgrade = valorUpgrade;
-        this.fortuneUpgrade = fortuneUpgrade;
-        this.limitUpgrade = limitUpgrade;
         this.autoSell = autoSell;
     }
 
@@ -40,7 +33,7 @@ public class ArmazemGuiListener implements Listener {
             e.setCancelled(true);
 
             if (e.getSlot() == 12) {
-                new CactusArmazemGUI(cactusStorageManager, valorUpgrade, fortuneUpgrade, limitUpgrade, autoSell).openCactoArmazem(playerUUID);
+                new CactusArmazemGUI(cactusStorageManager, autoSell).openCactoArmazem(playerUUID);
             }
         }
 

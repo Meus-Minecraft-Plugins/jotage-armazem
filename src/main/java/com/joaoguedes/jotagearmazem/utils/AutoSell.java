@@ -15,16 +15,17 @@ import java.util.UUID;
 public class AutoSell {
 
     private final Map<UUID, Integer> autoSellStatus = new HashMap<>();
-    private PlayerDataManager playerDataManager = JotageArmazem.getInstance().getPlayerDataManager();
+    private final PlayerDataManager playerDataManager = JotageArmazem.getInstance().getPlayerDataManager();
+    private final ValorUpgrade valorUpgrade = JotageArmazem.getInstance().getValorUpgrade();
 
-    public void enableAutoSell(Player player, CactusStorageManager cactusStorageManager, ValorUpgrade valorUpgrade) {
+    public void enableAutoSell(Player player, CactusStorageManager cactusStorageManager) {
         UUID playerUUID = player.getUniqueId();
 
         int taskId = new BukkitRunnable() {
             @Override
             public void run() {
                 int cactusCount = cactusStorageManager.getCactusCount(playerUUID);
-                long sellValue = cactusCount * valorUpgrade.getCactusValue(playerUUID);
+                long sellValue = cactusCount * valorUpgrade.getValue(playerDataManager.loadValueLevel(playerUUID));
                 Economy economy = JotageArmazem.getEconomy();
 
                 if (cactusCount > 0) {

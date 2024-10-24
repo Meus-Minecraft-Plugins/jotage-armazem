@@ -1,14 +1,11 @@
 package com.joaoguedes.jotagearmazem;
 
-import com.joaoguedes.jotagearmazem.commands.CactusCommand;
-import com.joaoguedes.jotagearmazem.commands.ReloadCommand;
+import com.joaoguedes.jotagearmazem.commands.ArmazemCommand;
 import com.joaoguedes.jotagearmazem.listeners.EventManager;
 import com.joaoguedes.jotagearmazem.menus.CactusArmazemGUI;
 import com.joaoguedes.jotagearmazem.utils.AutoSell;
 import com.joaoguedes.jotagearmazem.utils.CactusStorageManager;
-import com.joaoguedes.jotagearmazem.utils.CustomHead;
 import com.joaoguedes.jotagearmazem.utils.data.PlayerDataManager;
-import com.joaoguedes.jotagearmazem.utils.upgrade.UpgradeData;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.FortuneUpgrade;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.LimitUpgrade;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.ValorUpgrade;
@@ -21,23 +18,27 @@ import java.util.Objects;
 
 public final class JotageArmazem extends JavaPlugin {
     private static Economy economy = null;
-    private static FileConfiguration config;
+    private FileConfiguration config;
     private static JotageArmazem instance;
     private PlayerDataManager playerDataManager;
+    private ValorUpgrade valorUpgrade;
+    private LimitUpgrade limitUpgrade;
+    private FortuneUpgrade fortuneUpgrade;
 
     @Override
     public void onEnable() {
+        saveDefaultConfig();
         config = this.getConfig();
         instance = this;
 
         playerDataManager = new PlayerDataManager(getDataFolder());
+        valorUpgrade = new ValorUpgrade(playerDataManager, config.getLong("upgrades.valor.inicialcactusvalue"), config.getLong("upgrades.valor.inicialprice"), config.getInt("upgrades.valor.maxlevel"));
+        fortuneUpgrade = new FortuneUpgrade(playerDataManager, config.getInt("upgrades.fortune.inicialfortunevalue"), config.getLong("upgrades.fortune.inicialprice"), config.getInt("upgrades.fortune.maxlevel"));
+        limitUpgrade = new LimitUpgrade(playerDataManager, config.getInt("upgrades.limit.iniciallimitvalue"), config.getLong("upgrades.limit.inicialprice"), config.getInt("upgrades.limit.maxlevel"));
 
         CactusStorageManager cactusStorageManager = new CactusStorageManager();
-        ValorUpgrade valorUpgrade = new ValorUpgrade(new UpgradeData(), config.getInt("upgrades.valor.maxlevel"), config.getLong("upgrades.valor.inicialprice"));
-        FortuneUpgrade fortuneUpgrade = new FortuneUpgrade(new UpgradeData(), config.getInt("upgrades.fortune.maxlevel"), config.getLong("upgrades.fortune.inicialprice"));
-        LimitUpgrade limitUpgrade = new LimitUpgrade(new UpgradeData(), config.getInt("upgrades.limit.maxlevel"), config.getLong("upgrades.limit.inicialprice"));
         AutoSell autoSell = new AutoSell();
-        CactusArmazemGUI cactusArmazemGUI = new CactusArmazemGUI(cactusStorageManager, valorUpgrade, fortuneUpgrade, limitUpgrade, autoSell);
+        CactusArmazemGUI cactusArmazemGUI = new CactusArmazemGUI(cactusStorageManager, autoSell);
 
         if (!setupEconomy()) {
             getLogger().severe("Dependência do Vault não encontrada! O plugin será desativado.");
@@ -53,14 +54,11 @@ public final class JotageArmazem extends JavaPlugin {
 
         getServer().getConsoleSender().sendMessage("§d[JotaGe-Armazem] iniciado com sucesso!");
 
-        Objects.requireNonNull(getCommand("armazem")).setExecutor(new CactusCommand());
-        Objects.requireNonNull(getCommand("armazemreload")).setExecutor(new ReloadCommand(this));
+        Objects.requireNonNull(getCommand("armazem")).setExecutor(new ArmazemCommand());
 
-        EventManager.registerEvents(this, cactusStorageManager, valorUpgrade, fortuneUpgrade, limitUpgrade, cactusArmazemGUI, autoSell);
+        EventManager.registerEvents(this, cactusStorageManager, cactusArmazemGUI, autoSell);
 
 
-        saveDefaultConfig();
-        config.options().copyDefaults(true);
         saveConfig();
     }
 
@@ -82,11 +80,25 @@ public final class JotageArmazem extends JavaPlugin {
         return economy;
     }
 
-    public static FileConfiguration getPluginConfig() {
+    public FileConfiguration getPluginConfig() {
         return config;
     }
 
     public static JotageArmazem getInstance() { return instance; }
 
     public PlayerDataManager getPlayerDataManager() { return playerDataManager; }
+
+    public ValorUpgrade getValorUpgrade() { return valorUpgrade; }
+
+    public void setValorUpgrade(ValorUpgrade valorUpgrade) {
+        this.valorUpgrade = valorUpgrade;
+    }
+
+    public FortuneUpgrade getFortuneUpgrade() { return fortuneUpgrade; }
+
+    public void setFortuneUpgrade(FortuneUpgrade fortuneUpgrade) { this.fortuneUpgrade = fortuneUpgrade; }
+
+    public LimitUpgrade getLimitUpgrade() { return limitUpgrade; }
+
+    public void setLimitUpgrade(LimitUpgrade limitUpgrade) { this.limitUpgrade = limitUpgrade; }
 }

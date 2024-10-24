@@ -2,16 +2,14 @@ package com.joaoguedes.jotagearmazem.menus;
 
 import com.joaoguedes.jotagearmazem.JotageArmazem;
 import com.joaoguedes.jotagearmazem.utils.CustomHead;
+import com.joaoguedes.jotagearmazem.utils.data.PlayerDataManager;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.FortuneUpgrade;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.LimitUpgrade;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.ValorUpgrade;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -22,16 +20,7 @@ import java.util.UUID;
 public class UpgradeArmazemGUI {
 
     private final ItemStack backHead = CustomHead.getCustomTextureHead(CustomHead.backHead());
-
-    private final ValorUpgrade valorUpgrade;
-    private final FortuneUpgrade fortuneUpgrade;
-    private final LimitUpgrade limitUpgrade;
-
-    public UpgradeArmazemGUI(ValorUpgrade valorUpgrade, FortuneUpgrade fortuneUpgrade, LimitUpgrade limitUpgrade) {
-        this.valorUpgrade = valorUpgrade;
-        this.fortuneUpgrade = fortuneUpgrade;
-        this.limitUpgrade = limitUpgrade;
-    }
+    private final PlayerDataManager playerDataManager = JotageArmazem.getInstance().getPlayerDataManager();
 
     public void openUpgradeArmazemGUI(UUID playerUUID) {
         Player player = Bukkit.getPlayer(playerUUID);
@@ -46,6 +35,8 @@ public class UpgradeArmazemGUI {
     }
 
     public ItemStack createValorItem(UUID playerUUID) {
+        ValorUpgrade valorUpgrade2 = JotageArmazem.getInstance().getValorUpgrade();
+
         // Valor Upgrade Slot
         ItemStack valorItem = CustomHead.getCustomTextureHead(CustomHead.valueHead());
         ItemMeta valorMeta = valorItem.getItemMeta();
@@ -58,17 +49,13 @@ public class UpgradeArmazemGUI {
         valorLore.add("§7Aumenta o valor unitário");
         valorLore.add("§7de cada cacto.");
         valorLore.add("");
-        valorLore.add("§f Nível ≻ §7" + valorUpgrade.getCurrentLevel(playerUUID) + "/" + economy.format(valorUpgrade.getMaxLevel()));
-        valorLore.add("§f Valor ≻ §7" + economy.format(valorUpgrade.getCactusValue(playerUUID)));
+        valorLore.add("§f Nível ≻ §7" + playerDataManager.loadValueLevel(playerUUID) + "/" + valorUpgrade2.getMaxLevel());
+        valorLore.add("§f Valor ≻ §7" + economy.format(valorUpgrade2.getValue(playerDataManager.loadValueLevel(playerUUID))));
         valorLore.add("");
-        if (valorUpgrade.getCurrentLevel(playerUUID) == 1) {
-            valorLore.add("§a➜ §fPreço ≻ §e" + economy.format(JotageArmazem.getPluginConfig().getLong("upgrades.valor.inicialprice")));
-        } else if (valorUpgrade.getCurrentLevel(playerUUID) == JotageArmazem.getPluginConfig().getInt("upgrades.valor.maxlevel")) {
+        if (playerDataManager.loadValueLevel(playerUUID) == valorUpgrade2.getMaxLevel()) {
             valorLore.add("§a➜ §fNível ≻ §6§lMAX");
-            valorMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
-            valorMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         } else {
-            valorLore.add("§a➜ §fPreço ≻ §e" + economy.format(valorUpgrade.getCurrentPrice(playerUUID)));
+            valorLore.add("§a➜ §fPreço ≻ §e" + economy.format(valorUpgrade2.getPrice(playerDataManager.loadValueLevel(playerUUID))));
         }
         valorLore.add("");
         valorLore.add("§7 ● §aClique para evoluir!");
@@ -81,6 +68,8 @@ public class UpgradeArmazemGUI {
     }
 
     public ItemStack createFortunaItem(UUID playerUUID) {
+        FortuneUpgrade fortuneUpgrade = JotageArmazem.getInstance().getFortuneUpgrade();
+
         // Valor Upgrade Slot
         ItemStack fortunaItem = CustomHead.getCustomTextureHead(CustomHead.fortuneHead());
         ItemMeta fortunaMeta = fortunaItem.getItemMeta();
@@ -93,17 +82,13 @@ public class UpgradeArmazemGUI {
         fortunaLore.add("§7Multiplica o drop dos");
         fortunaLore.add("§7cactos.");
         fortunaLore.add("");
-        fortunaLore.add("§f Nível ≻ §7" + fortuneUpgrade.getCurrentLevel(playerUUID) + "/" + fortuneUpgrade.getMaxLevel());
-        fortunaLore.add("§f Fortuna ≻ §7" + fortuneUpgrade.getFortuneValue(playerUUID));
+        fortunaLore.add("§f Nível ≻ §7" + fortuneUpgrade.getLevel(playerUUID) + "/" + fortuneUpgrade.getMaxLevel());
+        fortunaLore.add("§f Fortuna ≻ §7" + fortuneUpgrade.getValue(fortuneUpgrade.getLevel(playerUUID)));
         fortunaLore.add("");
-        if (fortuneUpgrade.getCurrentLevel(playerUUID) == 1) {
-            fortunaLore.add("§a➜ §fPreço ≻ §e" + economy.format(JotageArmazem.getPluginConfig().getLong("upgrades.fortune.inicialprice")));
-        } else if (fortuneUpgrade.getCurrentLevel(playerUUID) == JotageArmazem.getPluginConfig().getInt("upgrades.fortune.maxlevel")) {
+        if (fortuneUpgrade.getLevel(playerUUID) == fortuneUpgrade.getMaxLevel()) {
             fortunaLore.add("§a➜ §fNível ≻ §6§lMAX");
-            fortunaMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
-            fortunaMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         } else {
-            fortunaLore.add("§a➜ §fPreço ≻ §e" + economy.format(fortuneUpgrade.getCurrentPrice(playerUUID)));
+            fortunaLore.add("§a➜ §fPreço ≻ §e" + economy.format(fortuneUpgrade.getPrice(fortuneUpgrade.getLevel(playerUUID))));
         }
         fortunaLore.add("");
         fortunaLore.add("§7 ● §aClique para evoluir!");
@@ -116,6 +101,8 @@ public class UpgradeArmazemGUI {
     }
 
     public ItemStack createLimiteItem(UUID playerUUID) {
+        LimitUpgrade limitUpgrade = JotageArmazem.getInstance().getLimitUpgrade();
+
         // Valor Upgrade Slot
         ItemStack limiteItem = CustomHead.getCustomTextureHead(CustomHead.limitHead());
         ItemMeta limiteMeta = limiteItem.getItemMeta();
@@ -128,17 +115,13 @@ public class UpgradeArmazemGUI {
         limiteLore.add("§7Aumenta a capacidade do");
         limiteLore.add("§7armazém.");
         limiteLore.add("");
-        limiteLore.add("§f Nível ≻ §7" + limitUpgrade.getCurrentLevel(playerUUID) + "/" + limitUpgrade.getMaxLevel());
-        limiteLore.add("§f Limite ≻ §7" + limitUpgrade.getLimitValue(playerUUID));
+        limiteLore.add("§f Nível ≻ §7" + limitUpgrade.getLevel(playerUUID) + "/" + limitUpgrade.getMaxLevel());
+        limiteLore.add("§f Limite ≻ §7" + limitUpgrade.getValue(limitUpgrade.getLevel(playerUUID)));
         limiteLore.add("");
-        if (limitUpgrade.getCurrentLevel(playerUUID) == 1) {
-            limiteLore.add("§a➜ §fPreço ≻ §e" + economy.format(JotageArmazem.getPluginConfig().getLong("upgrades.limit.inicialprice")));
-        } else if (limitUpgrade.getCurrentLevel(playerUUID) == JotageArmazem.getPluginConfig().getInt("upgrades.limit.maxlevel")) {
+        if (limitUpgrade.getLevel(playerUUID) == limitUpgrade.getMaxLevel()) {
             limiteLore.add("§a➜ §fNível ≻ §6§lMAX");
-            limiteMeta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
-            limiteMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         } else {
-            limiteLore.add("§a➜ §fPreço ≻ §e" + economy.format(limitUpgrade.getCurrentPrice(playerUUID)));
+            limiteLore.add("§a➜ §fPreço ≻ §e" + economy.format(limitUpgrade.getPrice(limitUpgrade.getLevel(playerUUID))));
         }
         limiteLore.add("");
         limiteLore.add("§7 ● §aClique para evoluir!");

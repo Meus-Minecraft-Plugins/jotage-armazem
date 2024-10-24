@@ -1,16 +1,22 @@
 upgrades:
   valor:
-    maxlevel: 12  # Defina aqui o nível máximo do Upgrade de VALOR.
-    inicialprice: 2000000000 # Defina aqui o custo de upgrade inicial do Upgrade de VALOR.
-    iniciallevel: 1 # Defina aqui o nível que o player deve iniciar do Upgrade de VALOR
-    inicialcactusvalue: 5000 # Defina aqui o valor unitário inicial do cacto no Upgrade de VALOR.
+    # Defina aqui o valor unitário inicial do cacto do Upgrade de VALOR.
+    inicialcactusvalue: 5000
+    # Defina aqui o custo de upgrade inicial do Upgrade de VALOR.
+    inicialprice: 2000000000
+    # Defina aqui o nível máximo do Upgrade de VALOR.
+    maxlevel: 12
   fortune:
-    maxlevel: 8  # Defina aqui o nível máximo do Upgrade de FORTUNA.
-    inicialprice: 100000000 # Defina aqui o custo de upgrade inicial do Upgrade de VALOR.
-    iniciallevel: 1 # Defina aqui o nível que o player deve iniciar do Upgrade de VALOR
-    inicialfortunevalue: 1 # Defina aqui o valor unitário inicial do cacto no Upgrade de VALOR.
+    # Defina aqui o valor inicial da fotuna do Upgrade de FORTUNA.
+    inicialfortunevalue: 1
+    # Defina aqui o custo de upgrade inicial do Upgrade de FORTUNA.
+    inicialprice: 100000000
+    # Defina aqui o nível máximo do Upgrade de FORTUNA.
+    maxlevel: 8
   limit:
-    maxlevel: 5
-    inicialprice: 100000000000
-    iniciallevel: 1
+    # Defina aqui o tamnho inicial do armazem do Upgrade de LIMITE.
     iniciallimitvalue: 1000
+    # Defina aqui o custo de upgrade inicial do Upgrade de LIMITE.
+    inicialprice: 100000000000
+    # Defina aqui o nível máximo do Upgrade de LIMITE.
+    maxlevel: 5

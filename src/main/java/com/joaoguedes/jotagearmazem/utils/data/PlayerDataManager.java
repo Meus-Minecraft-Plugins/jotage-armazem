@@ -41,4 +41,72 @@ public class PlayerDataManager {
         return playerData.getInt("cactusCount", 0);
     }
 
+    public void setValueLevel(UUID playerUUID, int valueLevel) {
+        File playerFile = new File(playerDataFolder, playerUUID.toString() + ".yml");
+        FileConfiguration playerData = YamlConfiguration.loadConfiguration(playerFile);
+
+        playerData.set("valuelevel", valueLevel);
+
+        try {
+            playerData.save(playerFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int loadValueLevel(UUID playerUUID) {
+        File playerFile = new File(playerDataFolder, playerUUID.toString() + ".yml");
+        if (!playerFile.exists()) {
+            return 1;
+        }
+
+        FileConfiguration playerData = YamlConfiguration.loadConfiguration(playerFile);
+        return playerData.getInt("valuelevel", 1);
+    }
+
+    public void setLimitLevel(UUID playerUUID, int valueLevel) {
+        File playerFile = new File(playerDataFolder, playerUUID.toString() + ".yml");
+        FileConfiguration playerData = YamlConfiguration.loadConfiguration(playerFile);
+
+        playerData.set("limitlevel", valueLevel);
+
+        try {
+            playerData.save(playerFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int loadLimitLevel(UUID playerUUID) {
+        File playerFile = new File(playerDataFolder, playerUUID.toString() + ".yml");
+        if (!playerFile.exists()) {
+            return 1;
+        }
+
+        FileConfiguration playerData = YamlConfiguration.loadConfiguration(playerFile);
+        return playerData.getInt("limitlevel", 1);
+    }
+
+    public void setFortuneLevel(UUID playerUUID, int valueLevel) {
+        File playerFile = new File(playerDataFolder, playerUUID.toString() + ".yml");
+        FileConfiguration playerData = YamlConfiguration.loadConfiguration(playerFile);
+
+        playerData.set("fortunelevel", valueLevel);
+
+        try {
+            playerData.save(playerFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int loadFortuneLevel(UUID playerUUID) {
+        File playerFile = new File(playerDataFolder, playerUUID.toString() + ".yml");
+        if (!playerFile.exists()) {
+            return 1;
+        }
+
+        FileConfiguration playerData = YamlConfiguration.loadConfiguration(playerFile);
+        return playerData.getInt("fortunelevel", 1);
+    }
 }
