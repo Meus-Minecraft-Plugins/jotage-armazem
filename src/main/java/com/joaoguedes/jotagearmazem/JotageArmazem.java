@@ -24,6 +24,7 @@ public final class JotageArmazem extends JavaPlugin {
     private ValorUpgrade valorUpgrade;
     private LimitUpgrade limitUpgrade;
     private FortuneUpgrade fortuneUpgrade;
+    private int cactusToAdd;
 
     @Override
     public void onEnable() {

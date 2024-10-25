@@ -10,6 +10,7 @@ import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.FortuneUpgrade;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.LimitUpgrade;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.ValorUpgrade;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -48,12 +49,16 @@ public class UpgradeArmazemGUIListener implements Listener {
                 long currentPrice = valorUpgrade.getPrice(playerDataManager.loadValueLevel(playerUUID));
                 if (economy.getBalance(player) >= currentPrice) {
                     valorUpgrade.upgradeValue(player);
-                    economy.withdrawPlayer(player, currentPrice);
-                    UpgradeArmazemGUI upgradeGUI = new UpgradeArmazemGUI();
-                    ItemStack newValorItem = upgradeGUI.createValorItem(playerUUID);
-                    e.getInventory().setItem(11, newValorItem);
+                    if (valorUpgrade.getLevel(playerUUID) >= valorUpgrade.getMaxLevel()) {
+                        economy.withdrawPlayer(player, currentPrice);
+                        UpgradeArmazemGUI upgradeGUI = new UpgradeArmazemGUI();
+                        ItemStack newValorItem = upgradeGUI.createValorItem(playerUUID);
+                        e.getInventory().setItem(11, newValorItem);
+                    }
+
                 } else {
-                    player.sendMessage("§cSaldo insuficiente para realizar o upgrade. Custo: §e" + economy.format(currentPrice));
+                    player.sendMessage("§2§l ARMAZEM §7◆ §cSaldo insuficiente para realizar o upgrade. Custo: §e" + economy.format(currentPrice));
+                    player.playSound(player.getLocation(), Sound.NOTE_BASS, 1.0f, 1.0f);
                 }
             }
 
@@ -61,12 +66,15 @@ public class UpgradeArmazemGUIListener implements Listener {
                 long currentPrice = fortuneUpgrade.getPrice(fortuneUpgrade.getLevel(playerUUID));
                 if (economy.getBalance(player) >= currentPrice) {
                     fortuneUpgrade.upgradeFortune(player);
-                    economy.withdrawPlayer(player, currentPrice);
-                    UpgradeArmazemGUI upgradeGUI = new UpgradeArmazemGUI();
-                    ItemStack newFortuneItem = upgradeGUI.createFortunaItem(playerUUID);
-                    e.getInventory().setItem(13, newFortuneItem);
+                    if (fortuneUpgrade.getLevel(playerUUID) >= fortuneUpgrade.getMaxLevel()) {
+                        economy.withdrawPlayer(player, currentPrice);
+                        UpgradeArmazemGUI upgradeGUI = new UpgradeArmazemGUI();
+                        ItemStack newFortuneItem = upgradeGUI.createFortunaItem(playerUUID);
+                        e.getInventory().setItem(13, newFortuneItem);
+                    }
                 } else {
-                    player.sendMessage("§cSaldo insuficiente para realizar o upgrade. Custo: §e" + economy.format(currentPrice));
+                    player.sendMessage("§2§l ARMAZEM §7◆ §cSaldo insuficiente para realizar o upgrade. Custo: §e" + economy.format(currentPrice));
+                    player.playSound(player.getLocation(), Sound.NOTE_BASS, 1.0f, 1.0f);
                 }
             }
 
@@ -74,12 +82,15 @@ public class UpgradeArmazemGUIListener implements Listener {
                 long currentPrice = limitUpgrade.getPrice(limitUpgrade.getLevel(playerUUID));
                 if (economy.getBalance(player) >= currentPrice) {
                     limitUpgrade.upgradeLimit(player);
-                    economy.withdrawPlayer(player, currentPrice);
-                    UpgradeArmazemGUI upgradeGUI = new UpgradeArmazemGUI();
-                    ItemStack newLimiteItem = upgradeGUI.createLimiteItem(playerUUID);
-                    e.getInventory().setItem(15, newLimiteItem);
+                    if (limitUpgrade.getLevel(playerUUID) >= limitUpgrade.getMaxLevel()) {
+                        economy.withdrawPlayer(player, currentPrice);
+                        UpgradeArmazemGUI upgradeGUI = new UpgradeArmazemGUI();
+                        ItemStack newLimiteItem = upgradeGUI.createLimiteItem(playerUUID);
+                        e.getInventory().setItem(15, newLimiteItem);
+                    }
                 } else {
-                    player.sendMessage("§cSaldo insuficiente para realizar o upgrade. Custo: §e" + economy.format(currentPrice));
+                    player.sendMessage("§2§l ARMAZEM §7◆ §cSaldo insuficiente para realizar o upgrade. Custo: §e" + economy.format(currentPrice));
+                    player.playSound(player.getLocation(), Sound.NOTE_BASS, 1.0f, 1.0f);
                 }
             }
 

@@ -2,6 +2,8 @@ package com.joaoguedes.jotagearmazem.utils.upgrade.upgrades;
 
 import com.joaoguedes.jotagearmazem.JotageArmazem;
 import com.joaoguedes.jotagearmazem.utils.data.PlayerDataManager;
+import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -24,6 +26,7 @@ public class LimitUpgrade {
         return inicialLimitValue * (currentLevel * currentLevel * currentLevel);
     }
 
+    // Calculate the price to ugprade based on currentLevel
     public long getPrice(int currentLevel) {
         return currentLevel * inicialPrice;
     }
@@ -48,6 +51,7 @@ public class LimitUpgrade {
 
         if (currentLevel < maxLevel) {
             playerDataManager.setLimitLevel(playerUUID, (currentLevel + 1));
+            player.playSound(player.getLocation(), Sound.LEVEL_UP, 1.0f, 1.0f);
         } else {
             player.sendMessage("§2§l ARMAZEM §cVocê chegou ao nível máximo!");
         }

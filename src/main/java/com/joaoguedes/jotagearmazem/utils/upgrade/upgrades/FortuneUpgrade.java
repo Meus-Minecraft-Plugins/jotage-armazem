@@ -4,6 +4,7 @@ import com.joaoguedes.jotagearmazem.JotageArmazem;
 import com.joaoguedes.jotagearmazem.utils.data.PlayerDataManager;
 import com.joaoguedes.jotagearmazem.utils.upgrade.UpgradeBase;
 import com.joaoguedes.jotagearmazem.utils.upgrade.UpgradeData;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -27,9 +28,8 @@ public class FortuneUpgrade {
         return inicialFortuneValue * currentLevel;
     }
 
-    public long getPrice(int currentLevel) {
-        return inicialPrice * (currentLevel * currentLevel);
-    }
+    // Calculate the price to ugprade based on currentLevel
+    public long getPrice(int currentLevel) { return inicialPrice * (currentLevel * currentLevel); }
 
     public int getMaxLevel() {
         return maxLevel;
@@ -51,6 +51,7 @@ public class FortuneUpgrade {
 
         if (currentLevel < maxLevel) {
             playerDataManager.setFortuneLevel(playerUUID, (currentLevel + 1));
+            player.playSound(player.getLocation(), Sound.LEVEL_UP, 1.0f, 1.0f);
         } else {
             player.sendMessage("§2§l ARMAZEM §cVocê chegou ao nível máximo!");
         }
