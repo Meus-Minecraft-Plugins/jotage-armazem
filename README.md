@@ -1,6 +1,6 @@
 # JotaGe Cactus Storage Plugin 1.0
 
-#### Este plugin permite que jogadores coletem e armazenem cactos automaticamente dentro de um armazém, com a capacidade de realizar upgrades, venda automática e interação via GUIs. Ele foi desenvolvido para a versão Minecraft 1.8.8 e utiliza várias funcionalidades como economia e sistemas de progressão.
+<p>Este plugin permite que jogadores coletem e armazenem cactos automaticamente dentro de um armazém, com a capacidade de realizar upgrades, venda automática e interação via GUIs. Ele foi desenvolvido para a versão Minecraft 1.8.8 e utiliza várias funcionalidades como economia e sistemas de progressão.</p>
 
 ---
 
