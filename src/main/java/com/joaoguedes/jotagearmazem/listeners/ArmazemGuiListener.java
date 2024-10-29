@@ -32,7 +32,7 @@ public class ArmazemGuiListener implements Listener {
         if (guiName.equals("Armazem")) {
             e.setCancelled(true);
 
-            if (e.getSlot() == 12) {
+            if (e.getSlot() == 13) {
                 new CactusArmazemGUI(cactusStorageManager, autoSell).openCactoArmazem(playerUUID);
             }
         }

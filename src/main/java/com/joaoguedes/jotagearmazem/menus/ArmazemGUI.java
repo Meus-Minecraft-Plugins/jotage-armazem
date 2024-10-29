@@ -2,7 +2,6 @@ package com.joaoguedes.jotagearmazem.menus;
 
 import com.joaoguedes.jotagearmazem.utils.CustomHead;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -29,22 +28,22 @@ public class ArmazemGUI {
         cactusMeta.setLore(cactusLore);
         cactusItem.setItemMeta(cactusMeta);
 
-        armazem.setItem(12, cactusItem);
+        armazem.setItem(13, cactusItem);
 
         // Criando um item das canas
-        ItemStack caneItem = CustomHead.getCustomTextureHead(CustomHead.caneHead());
-        ItemMeta caneMeta = caneItem.getItemMeta();
-        caneMeta.setDisplayName("§a§lArmazém de Cana");
-
-        List<String> caneLore = new ArrayList<>();
-        caneLore.add("");
-        caneLore.add("§7 ◆ Clique para acessar o armazém.");
-        caneLore.add("");
-        caneLore.add("§c- EM BREVE -");
-        caneMeta.setLore(caneLore);
-        caneItem.setItemMeta(caneMeta);
-
-        armazem.setItem(14, caneItem);
+//        ItemStack caneItem = CustomHead.getCustomTextureHead(CustomHead.caneHead());
+//        ItemMeta caneMeta = caneItem.getItemMeta();
+//        caneMeta.setDisplayName("§a§lArmazém de Cana");
+//
+//        List<String> caneLore = new ArrayList<>();
+//        caneLore.add("");
+//        caneLore.add("§7 ◆ Clique para acessar o armazém.");
+//        caneLore.add("");
+//        caneLore.add("§c- EM BREVE -");
+//        caneMeta.setLore(caneLore);
+//        caneItem.setItemMeta(caneMeta);
+//
+//        armazem.setItem(14, caneItem);
 
         player.openInventory(armazem);
     }
