@@ -6,8 +6,6 @@ import com.joaoguedes.jotagearmazem.menus.UpgradeArmazemGUI;
 import com.joaoguedes.jotagearmazem.utils.AutoSell;
 import com.joaoguedes.jotagearmazem.utils.CactusStorageManager;
 import com.joaoguedes.jotagearmazem.JotageArmazem;
-import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.FortuneUpgrade;
-import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.LimitUpgrade;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.ValorUpgrade;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.entity.Player;

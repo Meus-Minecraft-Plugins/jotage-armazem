@@ -8,11 +8,10 @@ import com.joaoguedes.jotagearmazem.utils.data.PlayerDataManager;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.FortuneUpgrade;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.LimitUpgrade;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
+import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.ItemSpawnEvent;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.event.block.BlockGrowEvent;
 
 import java.util.UUID;
 
@@ -28,12 +27,11 @@ public class CactusDropListener implements Listener {
     }
 
     @EventHandler
-    public void onItemSpawn(ItemSpawnEvent e) {
-        Item item = e.getEntity();
-        ItemStack itemStack = item.getItemStack();
+    public void onCactusGrow(BlockGrowEvent e) {
+        if (e.getBlock().getRelative(BlockFace.DOWN).getType() == Material.CACTUS) {
+            Plot plot = plotAPI.getPlot(e.getBlock().getLocation());
+            e.setCancelled(true);
 
-        if (itemStack.getType() == Material.CACTUS) {
-            Plot plot = plotAPI.getPlot(item.getLocation());
             if (plot != null && plot.hasOwner()) {
                 UUID playerUUID = plot.getOwners().iterator().next();
                 PlayerDataManager playerDataManager = JotageArmazem.getInstance().getPlayerDataManager();
@@ -41,10 +39,9 @@ public class CactusDropListener implements Listener {
 
                 if (playerUUID != null) {
                     if (!(totalCactus >= (limitUpgrade.getValue(limitUpgrade.getLevel(playerUUID))))) {
-                        int amountToAdd = itemStack.getAmount() * fortuneUpgrade.getValue(fortuneUpgrade.getLevel(playerUUID));
+                        int amountToAdd = fortuneUpgrade.getValue(fortuneUpgrade.getLevel(playerUUID));
                         cactusStorageManager.addCactus(playerUUID, amountToAdd);
                     }
-                    item.remove();
                 }
             }
         }

@@ -5,7 +5,6 @@ import com.joaoguedes.jotagearmazem.listeners.EventManager;
 import com.joaoguedes.jotagearmazem.menus.CactusArmazemGUI;
 import com.joaoguedes.jotagearmazem.utils.AutoSell;
 import com.joaoguedes.jotagearmazem.utils.CactusStorageManager;
-import com.joaoguedes.jotagearmazem.utils.data.DataBase;
 import com.joaoguedes.jotagearmazem.utils.data.PlayerDataManager;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.FortuneUpgrade;
 import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.LimitUpgrade;
@@ -15,7 +14,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.sql.SQLException;
 import java.util.Objects;
 
 public final class JotageArmazem extends JavaPlugin {
@@ -26,7 +24,6 @@ public final class JotageArmazem extends JavaPlugin {
     private ValorUpgrade valorUpgrade;
     private LimitUpgrade limitUpgrade;
     private FortuneUpgrade fortuneUpgrade;
-    private DataBase dataBase;
 
     @Override
     public void onEnable() {
@@ -34,14 +31,17 @@ public final class JotageArmazem extends JavaPlugin {
         config = this.getConfig();
         instance = this;
 
-        dataBase = new DataBase();
-        try {
-            dataBase.connect();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+//        this.dataBase = new DataBase();
+//        System.out.println("Connecting to the database...");
+//        try {
+//            dataBase.connect();
+//            System.out.println("Connected successfully to the database.");
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            System.out.println("Failed to connect to the database.");
+//        }
 
-        System.out.println(dataBase.isConnected());
+//        System.out.println(dataBase.isConnected());
 
         playerDataManager = new PlayerDataManager(getDataFolder());
         valorUpgrade = new ValorUpgrade(playerDataManager, config.getLong("upgrades.valor.inicialcactusvalue"), config.getLong("upgrades.valor.inicialprice"), config.getInt("upgrades.valor.maxlevel"));
@@ -72,11 +72,6 @@ public final class JotageArmazem extends JavaPlugin {
 
 
         saveConfig();
-    }
-
-    @Override
-    public void onDisable() {
-        dataBase.disconnect();
     }
 
     private boolean setupEconomy() {

@@ -3,8 +3,6 @@ package com.joaoguedes.jotagearmazem.listeners;
 import com.joaoguedes.jotagearmazem.menus.CactusArmazemGUI;
 import com.joaoguedes.jotagearmazem.utils.AutoSell;
 import com.joaoguedes.jotagearmazem.utils.CactusStorageManager;
-import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.FortuneUpgrade;
-import com.joaoguedes.jotagearmazem.utils.upgrade.upgrades.LimitUpgrade;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
